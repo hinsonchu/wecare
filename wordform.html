@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Forms Practice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #2B4570;
+      --primary-light: #3A5D94;
+      --primary-pale: #E3EAF4;
+      --accent: #E8853A;
+      --accent-light: #FFAB6B;
+      --accent-glow: rgba(232, 133, 58, 0.25);
+      --success: #3DA35D;
+      --success-bg: #E9F7EE;
+      --error: #D64045;
+      --error-bg: #FDECEC;
+      --bg: #F7F5EF;
+      --bg-pattern: rgba(43, 69, 112, 0.03);
+      --card: #FFFFFF;
+      --card-hover: #FAFAF8;
+      --text: #1A1A2E;
+      --text-secondary: #5C5C78;
+      --text-muted: #8E8EA8;
+      --border: #DDD9D0;
+      --border-light: #ECEAE4;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --radius-xs: 7px;
+    }
+
+    .dark {
+      --primary: #6B9FDB;
+      --primary-light: #8BB8E8;
+      --primary-pale: #1E2A40;
+      --accent: #FFAB6B;
+      --accent-light: #FFC99A;
+      --accent-glow: rgba(255, 171, 107, 0.2);
+      --success: #5ABF75;
+      --success-bg: #162A1D;
+      --error: #F06060;
+      --error-bg: #2E1515;
+      --bg: #111621;
+      --bg-pattern: rgba(107, 159, 219, 0.04);
+      --card: #1A2030;
+      --card-hover: #212940;
+      --text: #E4E2DC;
+      --text-secondary: #A0A0B8;
+      --text-muted: #6A6A82;
+      --border: #2A3248;
+      --border-light: #222A3C;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 1px 1px, var(--bg-pattern) 1px, transparent 0);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #app {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 16px;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 520px;
+      animation: screenIn 0.4s ease;
+    }
+    .screen.active { display: block; }
+
+    @keyframes screenIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== WELCOME SCREEN ===== */
+    .welcome-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .welcome-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 34px;
+      box-shadow: 0 6px 24px rgba(43, 69, 112, 0.25);
+      animation: iconFloat 3s ease-in-out infinite;
+    }
+    .dark .welcome-icon {
+      box-shadow: 0 6px 24px rgba(107, 159, 219, 0.2);
+    }
+
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .welcome-title {
+      font-family: 'Zilla Slab', serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .welcome-subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 7px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 16px;
+      color: var(--text);
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #D6752E);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px var(--accent-glow);
+      margin-top: 6px;
+    }
+    .btn-primary:hover { box-shadow: 0 6px 22px var(--accent-glow); transform: translateY(-1px); }
+
+    .btn-secondary {
+      width: 100%;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 10px 28px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .btn-secondary:hover { color: var(--primary); }
+
+    .btn-ghost {
+      background: var(--primary-pale);
+      color: var(--primary);
+      padding: 11px 22px;
+      font-size: 15px;
+    }
+    .btn-ghost:hover { background: var(--primary); color: #fff; }
+
+    /* ===== QUIZ SCREEN ===== */
+    .quiz-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .quiz-progress-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .quiz-progress-text span { color: var(--accent); }
+
+    .quiz-score-live {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 7px;
+      background: var(--border-light);
+      border-radius: 10px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      border-radius: 10px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 18px;
+    }
+
+    .question-type-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      background: var(--primary-pale);
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    .question-text {
+      font-family: 'Zilla Slab', serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .question-text .highlight {
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-style: normal;
+      text-decoration: underline;
+      text-decoration-color: var(--accent);
+      text-underline-offset: 3px;
+    }
+
+    .question-base-word {
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .question-base-word strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 0;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 14px 18px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      line-height: 1.4;
+    }
+    .option-btn:hover:not(.disabled) {
+      border-color: var(--primary);
+      background: var(--card-hover);
+      transform: translateX(4px);
+    }
+
+    .option-btn .option-letter {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+
+    .option-btn.correct {
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+    .option-btn.correct .option-letter {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .option-btn.wrong {
+      border-color: var(--error);
+      background: var(--error-bg);
+      animation: headShake 0.5s ease;
+    }
+    .option-btn.wrong .option-letter {
+      background: var(--error);
+      color: #fff;
+    }
+
+    .option-btn.disabled { cursor: default; pointer-events: none; }
+    .option-btn.disabled:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    @keyframes headShake {
+      0% { transform: translateX(0); }
+      15% { transform: translateX(-6px); }
+      30% { transform: translateX(5px); }
+      45% { transform: translateX(-4px); }
+      60% { transform: translateX(3px); }
+      75% { transform: translateX(-1px); }
+      100% { transform: translateX(0); }
+    }
+
+    .feedback-box {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      line-height: 1.5;
+      display: none;
+      animation: feedbackIn 0.3s ease;
+    }
+    .feedback-box.show { display: block; }
+    .feedback-box.correct-fb {
+      background: var(--success-bg);
+      border-left: 4px solid var(--success);
+      color: var(--success);
+    }
+    .dark .feedback-box.correct-fb { color: var(--success); }
+    .feedback-box.wrong-fb {
+      background: var(--error-bg);
+      border-left: 4px solid var(--error);
+      color: var(--error);
+    }
+    .dark .feedback-box.wrong-fb { color: var(--error); }
+
+    .feedback-box .fb-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .feedback-box .fb-explain {
+      font-weight: 400;
+      opacity: 0.85;
+      font-size: 13.5px;
+    }
+
+    @keyframes feedbackIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .next-btn-wrap {
+      margin-top: 18px;
+      display: none;
+      animation: feedbackIn 0.3s ease;
+    }
+    .next-btn-wrap.show { display: block; }
+
+    /* ===== RESULTS SCREEN ===== */
+    .results-container {
+      animation: resultsIn 0.6s ease;
+    }
+
+    @keyframes resultsIn {
+      from { opacity: 0; transform: scale(0.95) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .result-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--success));
+    }
+
+    .result-header-text {
+      font-family: 'Zilla Slab', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .score-circle-wrap {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 12px;
+    }
+    .score-circle-wrap svg {
+      transform: rotate(-90deg);
+      width: 150px;
+      height: 150px;
+    }
+    .score-circle-bg {
+      fill: none;
+      stroke: var(--border-light);
+      stroke-width: 10;
+    }
+    .score-circle-fill {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .score-circle-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-number {
+      font-family: 'Zilla Slab', serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .score-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .score-message {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      padding: 8px 20px;
+      border-radius: 24px;
+      display: inline-block;
+    }
+
+    .result-details {
+      text-align: left;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+
+    .result-detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      font-size: 14px;
+    }
+    .result-detail-row:not(:last-child) {
+      border-bottom: 1px solid var(--border-light);
+    }
+    .result-detail-row .detail-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .result-detail-row .detail-value {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    [contenteditable="true"] {
+      outline: none;
+      border-radius: 6px;
+    }
+
+    [contenteditable="true"]:focus {
+      box-shadow: 0 0 0 2px var(--accent-glow);
+      background: var(--card-hover);
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .result-actions .btn { flex: 1; }
+
+    .confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      top: -20px;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ===== STUDY NOTES ===== */
+    .notes-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .notes-title {
+      font-family: 'Zilla Slab', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .notes-title-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .notes-nav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 20px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .notes-nav::-webkit-scrollbar { display: none; }
+
+    .notes-tab {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      background: var(--card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      outline: none;
+    }
+    .notes-tab:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .notes-tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .dark .notes-tab.active {
+      background: var(--primary);
+      color: #111;
+    }
+
+    .notes-section {
+      display: none;
+      animation: feedbackIn 0.3s ease;
+    }
+    .notes-section.active { display: block; }
+
+    .note-card {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 14px;
+    }
+
+    .note-card-title {
+      font-family: 'Zilla Slab', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .note-card-title .note-emoji {
+      font-size: 20px;
+    }
+
+    .note-card p, .note-card li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 6px;
+    }
+    .note-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .note-card ul li {
+      padding: 3px 0 3px 20px;
+      position: relative;
+    }
+    .note-card ul li::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .suffix-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 10px 0 4px;
+    }
+    .suffix-chip {
+      background: var(--bg);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xs);
+      padding: 8px 12px;
+      text-align: center;
+    }
+    .suffix-chip .sfx {
+      font-family: 'Zilla Slab', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .suffix-chip .sfx-ex {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .example-sentence {
+      background: var(--bg);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      padding: 10px 14px;
+      margin: 8px 0;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .example-sentence .ex-word {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-color: var(--accent);
+      text-underline-offset: 3px;
+    }
+    .example-sentence .ex-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .tip-box {
+      background: var(--accent-glow);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-xs);
+      padding: 12px 16px;
+      margin: 10px 0 4px;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .tip-box .tip-label {
+      font-weight: 700;
+      color: var(--accent);
+      margin-right: 4px;
+    }
+
+    .pos-tag {
+      display: inline-block;
+      padding: 2px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-radius: 12px;
+      margin-right: 2px;
+      vertical-align: middle;
+    }
+    .pos-tag.noun { background: #dbeafe; color: #1e40af; }
+    .dark .pos-tag.noun { background: #1e3a5f; color: #93c5fd; }
+    .pos-tag.verb { background: #fce7f3; color: #9d174d; }
+    .dark .pos-tag.verb { background: #4a1942; color: #f9a8d4; }
+    .pos-tag.adj { background: #dcfce7; color: #166534; }
+    .dark .pos-tag.adj { background: #14532d; color: #86efac; }
+    .pos-tag.adv { background: #fef3c7; color: #92400e; }
+    .dark .pos-tag.adv { background: #451a03; color: #fcd34d; }
+
+    .word-family-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 4px;
+      font-size: 13px;
+    }
+    .word-family-table th {
+      background: var(--primary-pale);
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.6px;
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+    .word-family-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-secondary);
+    }
+    .word-family-table tr:last-child td { border-bottom: none; }
+    .word-family-table td strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .btn-study {
+      width: 100%;
+      background: var(--primary-pale);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 13px 28px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn-study:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-study:active { transform: scale(0.97); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 480px) {
+      #app { padding: 16px 12px; }
+      .welcome-title { font-size: 26px; }
+      .question-text { font-size: 18px; }
+      .form-card { padding: 22px 18px; }
+      .result-card { padding: 26px 20px; }
+      .score-circle-wrap { width: 130px; height: 130px; }
+      .score-circle-wrap svg { width: 130px; height: 130px; }
+      .score-number { font-size: 38px; }
+      .result-actions { flex-direction: column; }
+      .suffix-grid { grid-template-columns: 1fr; }
+      .notes-title { font-size: 20px; }
+    }
+
+    /* Stagger animations for welcome */
+    .stagger-1 { animation: screenIn 0.4s ease 0.05s both; }
+    .stagger-2 { animation: screenIn 0.4s ease 0.15s both; }
+    .stagger-3 { animation: screenIn 0.4s ease 0.25s both; }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- WELCOME SCREEN -->
+    <div id="welcome-screen" class="screen">
+      <div class="welcome-header stagger-1">
+        <div class="welcome-icon">📝</div>
+        <h1 class="welcome-title">Word Forms Practice</h1>
+        <p class="welcome-subtitle">Test your knowledge of nouns, verbs, adjectives &amp; adverbs across 10 questions.</p>
+      </div>
+      <div class="form-card stagger-2">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="input-class">Class</label>
+            <input class="form-input" id="input-class" type="text" placeholder="e.g. 4A">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-number">Class Number</label>
+            <input class="form-input" id="input-number" type="text" placeholder="e.g. 12" inputmode="numeric">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="input-name">Name</label>
+          <input class="form-input" id="input-name" type="text" placeholder="Your full name">
+        </div>
+        <button class="btn btn-primary" id="btn-start">Start Practice ➜</button>
+        <button class="btn btn-secondary" id="btn-guest">Continue as Guest</button>
+      </div>
+      <button class="btn-study stagger-3" id="btn-open-notes">📖 Study Notes — Review Before the Quiz</button>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="screen">
+      <div class="quiz-top">
+        <span class="quiz-progress-text">Question <span id="q-current">1</span> / 10</span>
+        <span class="quiz-score-live" id="live-score">Score: 0</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+      </div>
+      <div class="question-card">
+        <div class="question-type-badge" id="q-type-badge">Fill in the Blank</div>
+        <div class="question-text" id="q-text"></div>
+        <div class="question-base-word" id="q-base-word"></div>
+      </div>
+      <div class="options-list" id="options-list"></div>
+      <div class="feedback-box" id="feedback-box">
+        <div class="fb-title" id="fb-title"></div>
+        <div class="fb-explain" id="fb-explain"></div>
+      </div>
+      <div class="next-btn-wrap" id="next-btn-wrap">
+        <button class="btn btn-primary" id="btn-next">Next Question ➜</button>
+      </div>
+    </div>
+
+    <!-- RESULTS SCREEN -->
+    <div id="results-screen" class="screen active">
+      <div class="results-container">
+        <div class="result-card">
+          <div class="result-header-text" contenteditable="true" spellcheck="false">Practice Complete!</div>
+          <div class="score-circle-wrap">
+            <svg viewBox="0 0 150 150">
+              <circle class="score-circle-bg" cx="75" cy="75" r="62"></circle>
+              <circle class="score-circle-fill" id="score-arc" cx="75" cy="75" r="62"
+                stroke-dasharray="389.56" stroke-dashoffset="389.56"></circle>
+            </svg>
+            <div class="score-circle-text">
+              <div class="score-number" id="score-display" contenteditable="true" spellcheck="false">0</div>
+              <div class="score-label">out of 10</div>
+            </div>
+          </div>
+          <div class="score-message" id="score-message">Great Job!</div>
+          <div class="result-details" id="result-details">
+            <div class="result-detail-row"><span class="detail-label">Name</span><span class="detail-value" id="detail-name" contenteditable="true" spellcheck="false">GUEST</span></div>
+            <div class="result-detail-row"><span class="detail-label">Class</span><span class="detail-value" id="detail-class" contenteditable="true" spellcheck="false">4D</span></div>
+            <div class="result-detail-row"><span class="detail-label">Class Number</span><span class="detail-value" id="detail-number" contenteditable="true" spellcheck="false">8</span></div>
+            <div class="result-detail-row"><span class="detail-label">Score</span><span class="detail-value" id="detail-score" contenteditable="true" spellcheck="false">0 / 10</span></div>
+            <div class="result-detail-row"><span class="detail-label">Date</span><span class="detail-value" id="detail-date" contenteditable="true" spellcheck="false"></span></div>
+            <div class="result-detail-row"><span class="detail-label">Time</span><span class="detail-value" id="detail-time" contenteditable="true" spellcheck="false"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEW SCREEN -->
+    <div id="review-screen" class="screen">
+      <div class="quiz-top">
+        <span class="quiz-progress-text" style="font-size:16px;font-family:'Zilla Slab',serif;">Answer Review</span>
+        <button class="btn btn-ghost" id="btn-back-results" style="padding:8px 16px;font-size:13px;">← Back</button>
+      </div>
+      <div id="review-list" style="display:flex;flex-direction:column;gap:14px;"></div>
+    </div>
+
+    <!-- STUDY NOTES SCREEN -->
+    <div id="notes-screen" class="screen">
+      <div class="notes-header">
+        <div class="notes-title">
+          <div class="notes-title-icon">📖</div>
+          Study Notes
+        </div>
+        <button class="btn btn-ghost" id="btn-back-welcome" style="padding:8px 16px;font-size:13px;">← Back</button>
+      </div>
+
+      <div class="notes-nav" id="notes-nav">
+        <button class="notes-tab active" data-tab="overview">Overview</button>
+        <button class="notes-tab" data-tab="nouns">Nouns</button>
+        <button class="notes-tab" data-tab="verbs">Verbs</button>
+        <button class="notes-tab" data-tab="adjectives">Adjectives</button>
+        <button class="notes-tab" data-tab="adverbs">Adverbs</button>
+        <button class="notes-tab" data-tab="families">Word Families</button>
+        <button class="notes-tab" data-tab="tips">Exam Tips</button>
+      </div>
+
+      <!-- ===== OVERVIEW TAB ===== -->
+      <div class="notes-section active" id="tab-overview">
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🎯</span> What This Quiz Tests</div>
+          <p>This quiz tests your ability to choose and identify <strong>word forms</strong> — the different shapes a word can take depending on its role in a sentence. The four main parts of speech you need to know are:</p>
+          <ul>
+            <li><span class="pos-tag noun">Noun</span> — names a person, place, thing, or idea</li>
+            <li><span class="pos-tag verb">Verb</span> — describes an action or state</li>
+            <li><span class="pos-tag adj">Adjective</span> — describes a noun</li>
+            <li><span class="pos-tag adv">Adverb</span> — describes a verb, adjective, or another adverb</li>
+          </ul>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">📋</span> The 4 Question Types</div>
+          <ul>
+            <li><strong>Fill in the Blank:</strong> Choose the correct word form to complete a sentence. A base word is given.</li>
+            <li><strong>Identify Part of Speech:</strong> A word in the sentence is highlighted — say whether it's a noun, verb, adjective, or adverb.</li>
+            <li><strong>Word Transformation:</strong> Given a word and a target part of speech, pick the correct form (e.g. "strong" → noun = "strength").</li>
+            <li><strong>Correct Usage:</strong> Four sentences are shown — only one uses the word form correctly.</li>
+          </ul>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🔑</span> The Key Skill: Recognising Suffixes</div>
+          <p>The most reliable way to identify or choose a word form is by its <strong>suffix</strong> (ending). Different parts of speech have different typical endings. Study the tabs for each part of speech to learn these patterns.</p>
+          <div class="tip-box">
+            <span class="tip-label">💡 Tip:</span> When you see a blank in a sentence, first decide <em>what part of speech is needed</em> (noun? adjective? etc.), then choose the option with the matching suffix.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== NOUNS TAB ===== -->
+      <div class="notes-section" id="tab-nouns">
+        <div class="note-card">
+          <div class="note-card-title"><span class="pos-tag noun">Noun</span> What is a Noun?</div>
+          <p>A noun names a <strong>person, place, thing, or idea</strong>. In sentences, nouns typically act as the subject, object, or follow a preposition.</p>
+          <div class="example-sentence">
+            <span class="ex-label">Example</span>
+            The artist's latest <span class="ex-word">creation</span> was exhibited at the museum.
+          </div>
+          <div class="example-sentence">
+            <span class="ex-label">Example</span>
+            Making a good <span class="ex-word">decision</span> requires careful thought.
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🔤</span> Common Noun Suffixes</div>
+          <p>These endings signal that a word is a noun:</p>
+          <div class="suffix-grid">
+            <div class="suffix-chip"><span class="sfx">-tion / -sion</span><span class="sfx-ex">creation, decision</span></div>
+            <div class="suffix-chip"><span class="sfx">-ment</span><span class="sfx-ex">achievement, development</span></div>
+            <div class="suffix-chip"><span class="sfx">-ness</span><span class="sfx-ex">kindness, happiness</span></div>
+            <div class="suffix-chip"><span class="sfx">-ity / -ty</span><span class="sfx-ex">generosity, curiosity</span></div>
+            <div class="suffix-chip"><span class="sfx">-ance / -ence</span><span class="sfx-ex">attendance, difference</span></div>
+            <div class="suffix-chip"><span class="sfx">-er / -or</span><span class="sfx-ex">explorer, inventor</span></div>
+            <div class="suffix-chip"><span class="sfx">-al</span><span class="sfx-ex">survival, arrival</span></div>
+            <div class="suffix-chip"><span class="sfx">-dom / -th</span><span class="sfx-ex">freedom, warmth</span></div>
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">📐</span> Where Nouns Appear</div>
+          <ul>
+            <li><strong>After "the", "a", "an", "my", "his":</strong> The <em>protection</em> of animals…</li>
+            <li><strong>After adjectives:</strong> a remarkable <em>achievement</em></li>
+            <li><strong>As the subject:</strong> <em>Pollution</em> is harming our planet.</li>
+            <li><strong>After "of", "for", "in", "with":</strong> in <em>conclusion</em>, with <em>permission</em></li>
+            <li><strong>After "a/an" + adjective:</strong> a vivid <em>imagination</em></li>
+          </ul>
+          <div class="tip-box">
+            <span class="tip-label">💡 Tip:</span> If a blank comes after "the", "a/an", an adjective, or a preposition, you almost certainly need a <strong>noun</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== VERBS TAB ===== -->
+      <div class="notes-section" id="tab-verbs">
+        <div class="note-card">
+          <div class="note-card-title"><span class="pos-tag verb">Verb</span> What is a Verb?</div>
+          <p>A verb describes an <strong>action</strong> (run, create) or a <strong>state</strong> (is, seems). Verbs are the engine of every sentence.</p>
+          <div class="example-sentence">
+            <span class="ex-label">Example</span>
+            The students <span class="ex-word">discussed</span> the topic in class.
+          </div>
+          <div class="example-sentence">
+            <span class="ex-label">Example</span>
+            Scientists <span class="ex-word">classify</span> animals into groups.
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🔤</span> Common Verb Suffixes</div>
+          <p>These endings often signal that a word is a verb:</p>
+          <div class="suffix-grid">
+            <div class="suffix-chip"><span class="sfx">-ify</span><span class="sfx-ex">simplify, purify, classify</span></div>
+            <div class="suffix-chip"><span class="sfx">-ize / -ise</span><span class="sfx-ex">memorize, apologize</span></div>
+            <div class="suffix-chip"><span class="sfx">-en</span><span class="sfx-ex">strengthen, widen</span></div>
+            <div class="suffix-chip"><span class="sfx">-ate</span><span class="sfx-ex">communicate, educate</span></div>
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">📐</span> Where Verbs Appear</div>
+          <ul>
+            <li><strong>After "to":</strong> We need to <em>widen</em> the road.</li>
+            <li><strong>After "can/could/will/should":</strong> Exercise can <em>strengthen</em> your muscles.</li>
+            <li><strong>After the subject:</strong> The committee <em>approved</em> the plan.</li>
+            <li><strong>After "did/does/do":</strong> She did not <em>hesitate</em>.</li>
+          </ul>
+          <div class="tip-box">
+            <span class="tip-label">💡 Tip:</span> If a blank comes after "to", a modal verb (can, will, must, should), or a subject pronoun, you likely need a <strong>verb</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ADJECTIVES TAB ===== -->
+      <div class="notes-section" id="tab-adjectives">
+        <div class="note-card">
+          <div class="note-card-title"><span class="pos-tag adj">Adjective</span> What is an Adjective?</div>
+          <p>An adjective <strong>describes or modifies a noun</strong>. It tells you what something is like — its size, colour, quality, etc.</p>
+          <div class="example-sentence">
+            <span class="ex-label">Example</span>
+            She was extremely <span class="ex-word">successful</span> in passing all her exams.
+          </div>
+          <div class="example-sentence">
+            <span class="ex-label">Example</span>
+            She has a very <span class="ex-word">generous</span> personality.
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🔤</span> Common Adjective Suffixes</div>
+          <p>These endings often signal that a word is an adjective:</p>
+          <div class="suffix-grid">
+            <div class="suffix-chip"><span class="sfx">-ful</span><span class="sfx-ex">beautiful, helpful</span></div>
+            <div class="suffix-chip"><span class="sfx">-ous / -ious</span><span class="sfx-ex">dangerous, generous</span></div>
+            <div class="suffix-chip"><span class="sfx">-ive</span><span class="sfx-ex">creative, attractive</span></div>
+            <div class="suffix-chip"><span class="sfx">-able / -ible</span><span class="sfx-ex">reliable, comfortable</span></div>
+            <div class="suffix-chip"><span class="sfx">-al</span><span class="sfx-ex">traditional, natural</span></div>
+            <div class="suffix-chip"><span class="sfx">-ent / -ant</span><span class="sfx-ex">independent, hesitant</span></div>
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">📐</span> Where Adjectives Appear</div>
+          <ul>
+            <li><strong>Before a noun:</strong> a <em>remarkable</em> comeback</li>
+            <li><strong>After "is/was/are/were/seems/looks/feels":</strong> The painting was <em>valuable</em>.</li>
+            <li><strong>After "very/extremely/quite/really":</strong> very <em>dangerous</em></li>
+          </ul>
+          <div class="tip-box">
+            <span class="tip-label">💡 Tip:</span> If a blank is between "very" and nothing else, or between an article and a noun, you need an <strong>adjective</strong>. Also, after linking verbs like "is", "was", "looks", "feels", "seems" — use an adjective, NOT an adverb.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ADVERBS TAB ===== -->
+      <div class="notes-section" id="tab-adverbs">
+        <div class="note-card">
+          <div class="note-card-title"><span class="pos-tag adv">Adverb</span> What is an Adverb?</div>
+          <p>An adverb <strong>modifies a verb, an adjective, or another adverb</strong>. It tells you <em>how</em>, <em>when</em>, <em>where</em>, or <em>to what extent</em> something happens.</p>
+          <div class="example-sentence">
+            <span class="ex-label">Example</span>
+            She spoke <span class="ex-word">confidently</span> during the debate.
+          </div>
+          <div class="example-sentence">
+            <span class="ex-label">Example</span>
+            The journalist reported the facts <span class="ex-word">accurately</span>.
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🔤</span> Common Adverb Suffixes</div>
+          <p>Most adverbs are formed by adding <strong>-ly</strong> to the adjective:</p>
+          <div class="suffix-grid">
+            <div class="suffix-chip"><span class="sfx">-ly</span><span class="sfx-ex">carefully, beautifully</span></div>
+            <div class="suffix-chip"><span class="sfx">-ously</span><span class="sfx-ex">courageously, dangerously</span></div>
+            <div class="suffix-chip"><span class="sfx">-ively</span><span class="sfx-ex">decisively, creatively</span></div>
+            <div class="suffix-chip"><span class="sfx">-ally</span><span class="sfx-ex">scientifically, professionally</span></div>
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">📐</span> Where Adverbs Appear</div>
+          <ul>
+            <li><strong>Before or after a verb:</strong> He <em>carefully</em> opened the book. / He acted <em>courageously</em>.</li>
+            <li><strong>Before an adjective:</strong> The view was <em>incredibly</em> beautiful.</li>
+            <li><strong>At the start of a sentence:</strong> <em>Fortunately</em>, nobody was injured.</li>
+            <li><strong>Before another adverb:</strong> She ran <em>extremely</em> quickly.</li>
+          </ul>
+          <div class="tip-box">
+            <span class="tip-label">💡 Tip:</span> If a word describes <em>how</em> an action is done (modifies a verb), you need an <strong>adverb</strong>. A common mistake is using an adjective after an action verb — remember: "He acted <em>courageously</em>" (NOT "courageous").
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">⚠️</span> Adjective vs Adverb — The Big Trap</div>
+          <p>Many students confuse adjectives and adverbs. The key rule:</p>
+          <ul>
+            <li><strong>Linking verbs</strong> (is, was, looks, feels, seems, sounds) → use an <strong>adjective</strong>: The garden looked <em>beautiful</em>.</li>
+            <li><strong>Action verbs</strong> (ran, spoke, played, acted) → use an <strong>adverb</strong>: She spoke <em>beautifully</em>.</li>
+          </ul>
+          <div class="example-sentence">
+            <span class="ex-label">Adjective (linking verb)</span>
+            The village was very <span class="ex-word">peaceful</span>. ✓
+          </div>
+          <div class="example-sentence">
+            <span class="ex-label">Adverb (action verb)</span>
+            She left the room very <span class="ex-word">quietly</span>. ✓
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WORD FAMILIES TAB ===== -->
+      <div class="notes-section" id="tab-families">
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">👨‍👩‍👧‍👦</span> What Are Word Families?</div>
+          <p>A word family is a group of words that share the same root/base word but take different forms. Learning these patterns makes it easy to pick the right form in any sentence.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">📊</span> Key Word Families in This Quiz</div>
+          <table class="word-family-table">
+            <thead>
+              <tr><th>Noun</th><th>Verb</th><th>Adjective</th><th>Adverb</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>creation</strong></td><td><strong>create</strong></td><td>creative</td><td>creatively</td></tr>
+              <tr><td><strong>success</strong></td><td>succeed</td><td><strong>successful</strong></td><td>successfully</td></tr>
+              <tr><td><strong>beauty</strong></td><td>beautify</td><td><strong>beautiful</strong></td><td>beautifully</td></tr>
+              <tr><td><strong>strength</strong></td><td>strengthen</td><td>strong</td><td>strongly</td></tr>
+              <tr><td><strong>decision</strong></td><td>decide</td><td>decisive</td><td>decisively</td></tr>
+              <tr><td><strong>danger</strong></td><td>endanger</td><td><strong>dangerous</strong></td><td>dangerously</td></tr>
+              <tr><td><strong>imagination</strong></td><td>imagine</td><td>imaginative</td><td>imaginatively</td></tr>
+              <tr><td><strong>courage</strong></td><td>encourage</td><td>courageous</td><td><strong>courageously</strong></td></tr>
+              <tr><td><strong>competition</strong></td><td>compete</td><td>competitive</td><td>competitively</td></tr>
+              <tr><td><strong>education</strong></td><td>educate</td><td>educational</td><td>educationally</td></tr>
+              <tr><td><strong>generosity</strong></td><td>generalize</td><td>generous</td><td><strong>generously</strong></td></tr>
+              <tr><td><strong>freedom</strong></td><td>free</td><td>free</td><td>freely</td></tr>
+              <tr><td><strong>truth</strong></td><td>—</td><td>true / truthful</td><td>truly</td></tr>
+              <tr><td><strong>silence</strong></td><td>silence</td><td>silent</td><td><strong>silently</strong></td></tr>
+              <tr><td><strong>width</strong></td><td>widen</td><td>wide</td><td>widely</td></tr>
+              <tr><td><strong>depth</strong></td><td>deepen</td><td>deep</td><td>deeply</td></tr>
+            </tbody>
+          </table>
+          <div class="tip-box">
+            <span class="tip-label">💡 Tip:</span> Bold words are the ones most commonly tested. Try to memorise these families — they cover a huge portion of the quiz!
+          </div>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🔄</span> More Word Families</div>
+          <table class="word-family-table">
+            <thead>
+              <tr><th>Noun</th><th>Verb</th><th>Adjective</th><th>Adverb</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>pollution</td><td>pollute</td><td>polluted</td><td>—</td></tr>
+              <tr><td>invention</td><td>invent</td><td>inventive</td><td>inventively</td></tr>
+              <tr><td>tradition</td><td>—</td><td>traditional</td><td>traditionally</td></tr>
+              <tr><td>comfort</td><td>comfort</td><td>comfortable</td><td>comfortably</td></tr>
+              <tr><td>memory</td><td>memorize</td><td>memorable</td><td>memorably</td></tr>
+              <tr><td>apology</td><td>apologize</td><td>apologetic</td><td>apologetically</td></tr>
+              <tr><td>glory</td><td>glorify</td><td>glorious</td><td>gloriously</td></tr>
+              <tr><td>terror</td><td>terrify</td><td>terrible</td><td>terribly</td></tr>
+              <tr><td>anxiety</td><td>—</td><td>anxious</td><td>anxiously</td></tr>
+              <tr><td>failure</td><td>fail</td><td>—</td><td>—</td></tr>
+              <tr><td>popularity</td><td>popularize</td><td>popular</td><td>popularly</td></tr>
+              <tr><td>responsibility</td><td>—</td><td>responsible</td><td>responsibly</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== EXAM TIPS TAB ===== -->
+      <div class="notes-section" id="tab-tips">
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🧠</span> Step-by-Step Strategy</div>
+          <p>Follow these steps for every question:</p>
+          <ul>
+            <li><strong>Step 1:</strong> Read the whole sentence first.</li>
+            <li><strong>Step 2:</strong> Identify <em>what part of speech</em> the blank/question needs (noun, verb, adjective, adverb).</li>
+            <li><strong>Step 3:</strong> Look at the words around the blank for clues (articles, prepositions, verbs).</li>
+            <li><strong>Step 4:</strong> Check the suffix of each option to match the required part of speech.</li>
+            <li><strong>Step 5:</strong> Read the full sentence with your answer to check it makes sense.</li>
+          </ul>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🚦</span> Quick Clue Signals</div>
+          <table class="word-family-table">
+            <thead>
+              <tr><th>If you see…</th><th>You probably need…</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>the / a / an + ___</td><td><strong>Noun</strong></td></tr>
+              <tr><td>adjective + ___</td><td><strong>Noun</strong></td></tr>
+              <tr><td>___ + of / for / in</td><td><strong>Noun</strong></td></tr>
+              <tr><td>to + ___</td><td><strong>Verb</strong></td></tr>
+              <tr><td>can / will / must + ___</td><td><strong>Verb</strong></td></tr>
+              <tr><td>very / extremely + ___</td><td><strong>Adjective</strong></td></tr>
+              <tr><td>is / was / looks / seems + ___</td><td><strong>Adjective</strong></td></tr>
+              <tr><td>verb + ___</td><td><strong>Adverb</strong></td></tr>
+              <tr><td>___ + adjective</td><td><strong>Adverb</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">⚡</span> Common Mistakes to Avoid</div>
+          <ul>
+            <li><strong>Using an adjective instead of an adverb after action verbs:</strong> ✗ "She spoke <em>confident</em>" → ✓ "She spoke <em>confidently</em>"</li>
+            <li><strong>Using an adverb instead of an adjective after linking verbs:</strong> ✗ "It looks <em>beautifully</em>" → ✓ "It looks <em>beautiful</em>"</li>
+            <li><strong>Confusing -tion (noun) with -tive (adjective):</strong> "His <em>imagination</em> is great" (noun needed) vs. "He is <em>imaginative</em>" (adjective needed)</li>
+            <li><strong>Forgetting noun suffixes like -ment, -ness, -ity:</strong> "Her <em>kindness</em> made everyone feel welcome" — NOT "kind" or "kindly"</li>
+            <li><strong>Mixing up -er (person) with -tion (thing/concept):</strong> "The <em>explorer</em> discovered a cave" (person) vs. "The <em>exploration</em> took years" (concept)</li>
+          </ul>
+        </div>
+
+        <div class="note-card">
+          <div class="note-card-title"><span class="note-emoji">🎯</span> Final Checklist</div>
+          <ul>
+            <li>✅ I can identify noun, verb, adjective, and adverb suffixes</li>
+            <li>✅ I know the difference between linking verbs and action verbs</li>
+            <li>✅ I can spot position clues (after "the", "very", "to", etc.)</li>
+            <li>✅ I've reviewed at least 10 word families from the table</li>
+            <li>✅ I understand the adjective vs. adverb trap</li>
+          </ul>
+          <div class="tip-box">
+            <span class="tip-label">🏁 Ready?</span> Go back to the home screen and start the quiz. Remember: read the full sentence, find your clues, check the suffix. Good luck!
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ===== DARK MODE ===== */
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.classList.add('dark');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(event) {
+      if (event.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    });
+
+    /* ===== QUESTION BANK ===== */
+    var QUESTIONS = {
+      fill: [
+        { type:'fill', baseWord:'create', question:'The artist\'s latest _______ was exhibited at the museum.', options:['create','creation','creative','creatively'], answer:1, explanation:'"Creation" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'success', question:'She was extremely _______ in passing all her exams.', options:['success','succeed','successful','successfully'], answer:2, explanation:'"Successful" is the adjective form needed after "was" to describe "she".' },
+        { type:'fill', baseWord:'decide', question:'Making a good _______ requires careful thought.', options:['decide','decision','decisive','decisively'], answer:1, explanation:'"Decision" is the noun form needed as the object of "making".' },
+        { type:'fill', baseWord:'beauty', question:'The garden looked _______ in the spring sunshine.', options:['beauty','beautiful','beautifully','beautify'], answer:1, explanation:'"Beautiful" is the adjective form needed after the linking verb "looked".' },
+        { type:'fill', baseWord:'imagine', question:'Young children often have a vivid _______.', options:['imagine','imagination','imaginary','imaginative'], answer:1, explanation:'"Imagination" is the noun form needed as the object of "have".' },
+        { type:'fill', baseWord:'danger', question:'Swimming in the river alone can be very _______.', options:['danger','dangerous','dangerously','endanger'], answer:1, explanation:'"Dangerous" is the adjective form needed after "very".' },
+        { type:'fill', baseWord:'compete', question:'The _______ between the two schools was fierce.', options:['compete','competition','competitive','competitively'], answer:1, explanation:'"Competition" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'achieve', question:'Winning the award was her greatest _______.', options:['achieve','achievement','achievable','achiever'], answer:1, explanation:'"Achievement" is the noun form needed after "greatest".' },
+        { type:'fill', baseWord:'communicate', question:'Good _______ skills are essential for teamwork.', options:['communicate','communication','communicative','communicated'], answer:1, explanation:'"Communication" is the noun form needed to modify "skills".' },
+        { type:'fill', baseWord:'explore', question:'The _______ discovered a hidden cave in the mountains.', options:['explore','exploration','explorer','exploratory'], answer:2, explanation:'"Explorer" is the noun form (person) needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'educate', question:'She received an excellent _______ at university.', options:['educate','education','educational','educator'], answer:1, explanation:'"Education" is the noun form needed as the object of "received".' },
+        { type:'fill', baseWord:'courage', question:'The firefighter acted _______ during the rescue mission.', options:['courage','courageous','courageously','encourage'], answer:2, explanation:'"Courageously" is the adverb form needed to modify the verb "acted".' },
+        { type:'fill', baseWord:'differ', question:'There is a significant _______ between the two proposals.', options:['differ','different','differently','difference'], answer:3, explanation:'"Difference" is the noun form needed after "significant".' },
+        { type:'fill', baseWord:'enjoy', question:'The concert was highly _______ for all ages.', options:['enjoy','enjoyable','enjoyment','enjoyed'], answer:1, explanation:'"Enjoyable" is the adjective form needed after "highly" and the linking verb "was".' },
+        { type:'fill', baseWord:'predict', question:'The weather _______ says it will rain tomorrow.', options:['predict','prediction','predictable','predictably'], answer:1, explanation:'"Prediction" is the noun form needed as the subject that "says" something.' },
+        { type:'fill', baseWord:'inform', question:'The _______ in the brochure was very useful.', options:['inform','information','informative','informatively'], answer:1, explanation:'"Information" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'attract', question:'The city centre is very _______ to tourists.', options:['attract','attraction','attractive','attractively'], answer:2, explanation:'"Attractive" is the adjective form needed after "very" and the linking verb "is".' },
+        { type:'fill', baseWord:'develop', question:'The _______ of new technology takes many years.', options:['develop','development','developing','developer'], answer:1, explanation:'"Development" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'perform', question:'The dancers gave an outstanding _______ on stage.', options:['perform','performance','performing','performer'], answer:1, explanation:'"Performance" is the noun form needed as the object of "gave".' },
+        { type:'fill', baseWord:'observe', question:'The scientist made a careful _______ of the experiment.', options:['observe','observation','observant','observantly'], answer:1, explanation:'"Observation" is the noun form needed as the object of "made".' },
+        { type:'fill', baseWord:'depend', question:'He has always been a _______ friend in difficult times.', options:['depend','dependence','dependable','dependably'], answer:2, explanation:'"Dependable" is the adjective form needed to describe "friend".' },
+        { type:'fill', baseWord:'appreciate', question:'We would like to express our sincere _______.', options:['appreciate','appreciation','appreciative','appreciatively'], answer:1, explanation:'"Appreciation" is the noun form needed as the object of "express".' },
+        { type:'fill', baseWord:'survive', question:'_______ in the wilderness requires many skills.', options:['survive','survival','surviving','survivor'], answer:1, explanation:'"Survival" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'confuse', question:'The _______ caused by the new rules upset many people.', options:['confuse','confusion','confusing','confused'], answer:1, explanation:'"Confusion" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'pollute', question:'Air _______ is one of the biggest problems in cities.', options:['pollute','pollution','polluted','polluting'], answer:1, explanation:'"Pollution" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'invent', question:'Thomas Edison is famous for his _______ of the light bulb.', options:['invent','invention','inventive','inventor'], answer:1, explanation:'"Invention" is the noun form needed as the object of "for".' },
+        { type:'fill', baseWord:'tradition', question:'The festival is a _______ event held every spring.', options:['tradition','traditional','traditionally','traditionalist'], answer:1, explanation:'"Traditional" is the adjective form needed to modify the noun "event".' },
+        { type:'fill', baseWord:'science', question:'The results were tested _______ in the laboratory.', options:['science','scientific','scientifically','scientist'], answer:2, explanation:'"Scientifically" is the adverb form needed to modify the verb "tested".' },
+        { type:'fill', baseWord:'profession', question:'She always dresses and speaks _______ at work.', options:['profession','professional','professionally','professionalism'], answer:2, explanation:'"Professionally" is the adverb form needed to modify the verbs "dresses" and "speaks".' },
+        { type:'fill', baseWord:'suggest', question:'Thank you for your helpful _______.', options:['suggest','suggestion','suggestive','suggestively'], answer:1, explanation:'"Suggestion" is the noun form needed as the object of "for".' },
+        { type:'fill', baseWord:'express', question:'Her facial _______ showed that she was disappointed.', options:['express','expression','expressive','expressively'], answer:1, explanation:'"Expression" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'protect', question:'The _______ of endangered animals is everyone\'s duty.', options:['protect','protection','protective','protectively'], answer:1, explanation:'"Protection" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'satisfy', question:'The customer expressed her _______ with the service.', options:['satisfy','satisfaction','satisfactory','satisfying'], answer:1, explanation:'"Satisfaction" is the noun form needed as the object of "expressed".' },
+        { type:'fill', baseWord:'vary', question:'The market sells a wide _______ of fruits and vegetables.', options:['vary','variety','various','variably'], answer:1, explanation:'"Variety" is the noun form needed as the object of "sells".' },
+        { type:'fill', baseWord:'admit', question:'_______ to the museum is free on Sundays.', options:['admit','admission','admissible','admittedly'], answer:1, explanation:'"Admission" is the noun form meaning entry, needed as the subject.' },
+        { type:'fill', baseWord:'accurate', question:'The journalist reported the facts _______.', options:['accurate','accuracy','accurately','inaccurate'], answer:2, explanation:'"Accurately" is the adverb form needed to modify the verb "reported".' },
+        { type:'fill', baseWord:'celebrate', question:'The birthday _______ was a huge success.', options:['celebrate','celebration','celebrated','celebratory'], answer:1, explanation:'"Celebration" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'comfort', question:'The new sofa is extremely _______ to sit on.', options:['comfort','comfortable','comfortably','comforting'], answer:1, explanation:'"Comfortable" is the adjective form needed after "extremely" and the linking verb "is".' },
+        { type:'fill', baseWord:'destroy', question:'The _______ caused by the storm was widespread.', options:['destroy','destruction','destructive','destructively'], answer:1, explanation:'"Destruction" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'hesitate', question:'After a brief _______, she accepted the offer.', options:['hesitate','hesitation','hesitant','hesitantly'], answer:1, explanation:'"Hesitation" is the noun form needed as the object of "after".' },
+        { type:'fill', baseWord:'attend', question:'Your _______ at the meeting is required.', options:['attend','attendance','attendant','attentive'], answer:1, explanation:'"Attendance" is the noun form meaning presence, needed as the subject.' },
+        { type:'fill', baseWord:'permit', question:'You need special _______ to enter this building.', options:['permit','permission','permissible','permissive'], answer:1, explanation:'"Permission" is the noun form needed as the object of "need".' },
+        { type:'fill', baseWord:'familiar', question:'His _______ with the local area helped the team navigate.', options:['familiar','familiarity','familiarize','familiarly'], answer:1, explanation:'"Familiarity" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'responsible', question:'Taking _______ for your actions is a sign of maturity.', options:['responsible','responsibility','responsibly','irresponsible'], answer:1, explanation:'"Responsibility" is the noun form needed as the object of "taking".' },
+        { type:'fill', baseWord:'improve', question:'There has been a remarkable _______ in her grades.', options:['improve','improvement','improved','improving'], answer:1, explanation:'"Improvement" is the noun form needed as the subject complement.' },
+        { type:'fill', baseWord:'excite', question:'The children could not hide their _______ on Christmas morning.', options:['excite','excitement','exciting','excitedly'], answer:1, explanation:'"Excitement" is the noun form needed as the object of "hide".' },
+        { type:'fill', baseWord:'repeat', question:'The _______ of the same mistake frustrated the coach.', options:['repeat','repetition','repetitive','repeatedly'], answer:1, explanation:'"Repetition" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'generous', question:'She _______ donated to the charity every month.', options:['generous','generosity','generously','generalize'], answer:2, explanation:'"Generously" is the adverb form needed to modify the verb "donated".' },
+        { type:'fill', baseWord:'possess', question:'The _______ of rare stamps made him feel proud.', options:['possess','possession','possessive','possessively'], answer:1, explanation:'"Possession" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'conclude', question:'In _______, I believe this plan will succeed.', options:['conclude','conclusion','conclusive','conclusively'], answer:1, explanation:'"Conclusion" is the noun form needed as the object of "in".' },
+        { type:'fill', baseWord:'respond', question:'The company received a very positive _______ from customers.', options:['respond','response','responsive','responsively'], answer:1, explanation:'"Response" is the noun form needed as the object of "received".' },
+        { type:'fill', baseWord:'construct', question:'The _______ of the new highway will take approximately three years.', options:['construct','construction','constructive','constructively'], answer:1, explanation:'"Construction" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'advertise', question:'The television _______ was both creative and memorable.', options:['advertise','advertisement','advertising','advertiser'], answer:1, explanation:'"Advertisement" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'anxious', question:'She waited _______ for the results of her medical test.', options:['anxious','anxiety','anxiously','anxieties'], answer:2, explanation:'"Anxiously" is the adverb form needed to modify the verb "waited".' },
+        { type:'fill', baseWord:'maintain', question:'Regular _______ of the equipment prevents costly breakdowns.', options:['maintain','maintenance','maintainable','maintained'], answer:1, explanation:'"Maintenance" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'determine', question:'His _______ to succeed inspired everyone around him.', options:['determine','determination','determined','determinedly'], answer:1, explanation:'"Determination" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'analyze', question:'The report required a very _______ approach to the data.', options:['analyze','analysis','analytical','analytically'], answer:2, explanation:'"Analytical" is the adjective form needed to modify the noun "approach".' },
+        { type:'fill', baseWord:'enthusiasm', question:'The fans cheered _______ when the team scored the winning goal.', options:['enthusiasm','enthusiastic','enthusiastically','enthusiast'], answer:2, explanation:'"Enthusiastically" is the adverb form needed to modify the verb "cheered".' },
+        { type:'fill', baseWord:'recommend', question:'The doctor\'s _______ was to rest for at least one week.', options:['recommend','recommendation','recommended','recommending'], answer:1, explanation:'"Recommendation" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'convenient', question:'The hotel is _______ located near the city centre.', options:['convenient','convenience','conveniently','inconvenient'], answer:2, explanation:'"Conveniently" is the adverb form needed to modify the verb "located".' },
+        { type:'fill', baseWord:'demonstrate', question:'The practical _______ showed exactly how the machine works.', options:['demonstrate','demonstration','demonstrative','demonstrably'], answer:1, explanation:'"Demonstration" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'absent', question:'Her frequent _______ from class concerned the teacher greatly.', options:['absent','absence','absently','absentee'], answer:1, explanation:'"Absence" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'recognize', question:'The building was easily _______ from the old photograph.', options:['recognize','recognition','recognizable','recognizably'], answer:2, explanation:'"Recognizable" is the adjective form needed after the linking verb "was".' },
+        { type:'fill', baseWord:'significant', question:'The _______ of this scientific discovery cannot be overstated.', options:['significant','significance','significantly','signify'], answer:1, explanation:'"Significance" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'assume', question:'Making an _______ without evidence can be very misleading.', options:['assume','assumption','assumed','assumingly'], answer:1, explanation:'"Assumption" is the noun form needed as the object of "making".' },
+        { type:'fill', baseWord:'cooperate', question:'The children were very _______ during the school field trip.', options:['cooperate','cooperation','cooperative','cooperatively'], answer:2, explanation:'"Cooperative" is the adjective form needed after the linking verb "were".' },
+        { type:'fill', baseWord:'intense', question:'She stared _______ at the painting for several long minutes.', options:['intense','intensity','intensely','intensify'], answer:2, explanation:'"Intensely" is the adverb form needed to modify the verb "stared".' },
+        { type:'fill', baseWord:'negotiate', question:'The peace _______ between the two nations lasted several months.', options:['negotiate','negotiation','negotiable','negotiator'], answer:1, explanation:'"Negotiation" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'fortune', question:'He was _______ enough to find his lost wallet on the street.', options:['fortune','fortunate','fortunately','misfortune'], answer:1, explanation:'"Fortunate" is the adjective form needed after the linking verb "was".' },
+        { type:'fill', baseWord:'interpret', question:'Her _______ of the poem was quite original and thought-provoking.', options:['interpret','interpretation','interpretive','interpreter'], answer:1, explanation:'"Interpretation" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'distribute', question:'The _______ of emergency supplies was organized very efficiently.', options:['distribute','distribution','distributive','distributor'], answer:1, explanation:'"Distribution" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'contribute', question:'Her _______ to the research project proved to be invaluable.', options:['contribute','contribution','contributory','contributor'], answer:1, explanation:'"Contribution" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'persist', question:'The _______ rain forced the cancellation of the outdoor event.', options:['persist','persistence','persistent','persistently'], answer:2, explanation:'"Persistent" is the adjective form needed to modify the noun "rain".' },
+        { type:'fill', baseWord:'curious', question:'The child _______ opened every drawer in the old cabinet.', options:['curious','curiosity','curiously','curiousness'], answer:2, explanation:'"Curiously" is the adverb form needed to modify the verb "opened".' },
+        { type:'fill', baseWord:'reserve', question:'You should make a _______ at the restaurant well in advance.', options:['reserve','reservation','reserved','reserving'], answer:1, explanation:'"Reservation" is the noun form needed as the object of "make".' },
+        { type:'fill', baseWord:'abundant', question:'There was an _______ of fresh fruit at the local market.', options:['abundant','abundance','abundantly','abound'], answer:1, explanation:'"Abundance" is the noun form needed as the complement after "was".' },
+        { type:'fill', baseWord:'concentrate', question:'Full _______ is essential during the driving examination.', options:['concentrate','concentration','concentrated','concentrating'], answer:1, explanation:'"Concentration" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'reliable', question:'The _______ of this brand has been proven over many years.', options:['reliable','reliability','reliably','reliance'], answer:1, explanation:'"Reliability" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'frequent', question:'She _______ visits the local library to borrow new books.', options:['frequent','frequency','frequently','infrequent'], answer:2, explanation:'"Frequently" is the adverb form needed to modify the verb "visits".' },
+        { type:'fill', baseWord:'occupy', question:'His main _______ before retirement was teaching mathematics.', options:['occupy','occupation','occupied','occupant'], answer:1, explanation:'"Occupation" is the noun form needed as the subject complement.' },
+        { type:'fill', baseWord:'prefer', question:'She has a strong _______ for classical music over jazz.', options:['prefer','preference','preferable','preferably'], answer:1, explanation:'"Preference" is the noun form needed as the object of "has".' },
+        { type:'fill', baseWord:'argue', question:'They had a heated _______ about the best route to take.', options:['argue','argument','argumentative','arguably'], answer:1, explanation:'"Argument" is the noun form needed as the object of "had".' },
+        { type:'fill', baseWord:'apply', question:'She submitted her job _______ well before the deadline.', options:['apply','application','applicable','applicant'], answer:1, explanation:'"Application" is the noun form needed as the object of "submitted".' },
+        { type:'fill', baseWord:'arrange', question:'The floral _______ on the reception table looked stunning.', options:['arrange','arrangement','arranged','arranger'], answer:1, explanation:'"Arrangement" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'accept', question:'The terms of the contract were entirely _______ to both parties.', options:['accept','acceptance','acceptable','acceptably'], answer:2, explanation:'"Acceptable" is the adjective form needed after the linking verb "were".' },
+        { type:'fill', baseWord:'expect', question:'There was a general _______ that prices would continue to rise.', options:['expect','expectation','expected','expectantly'], answer:1, explanation:'"Expectation" is the noun form needed as the subject complement.' },
+        { type:'fill', baseWord:'consider', question:'The manager was always very _______ towards her staff.', options:['consider','consideration','considerate','considerably'], answer:2, explanation:'"Considerate" is the adjective form needed after the linking verb "was".' },
+        { type:'fill', baseWord:'introduce', question:'The _______ of the new policy caused considerable debate.', options:['introduce','introduction','introductory','introduced'], answer:1, explanation:'"Introduction" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'prepare', question:'Careful _______ is the key to success in any examination.', options:['prepare','preparation','prepared','preparatory'], answer:1, explanation:'"Preparation" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'recover', question:'The patient made a complete _______ after the long surgery.', options:['recover','recovery','recovered','recoverable'], answer:1, explanation:'"Recovery" is the noun form needed as the object of "made".' },
+        { type:'fill', baseWord:'describe', question:'The author used very _______ language throughout the novel.', options:['describe','description','descriptive','descriptively'], answer:2, explanation:'"Descriptive" is the adjective form needed to modify the noun "language".' },
+        { type:'fill', baseWord:'disappoint', question:'The _______ on his face was obvious when he heard the news.', options:['disappoint','disappointment','disappointing','disappointed'], answer:1, explanation:'"Disappointment" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'employ', question:'_______ in the technology sector has grown rapidly this decade.', options:['employ','employment','employable','employer'], answer:1, explanation:'"Employment" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'encourage', question:'Words of _______ from her coach helped her finish the race.', options:['encourage','encouragement','encouraging','encouragingly'], answer:1, explanation:'"Encouragement" is the noun form needed as the object of "of".' },
+        { type:'fill', baseWord:'patient', question:'The nurse waited _______ while the elderly man found his words.', options:['patient','patience','patiently','impatient'], answer:2, explanation:'"Patiently" is the adverb form needed to modify the verb "waited".' },
+        { type:'fill', baseWord:'interfere', question:'Constant _______ from outsiders slowed down the entire project.', options:['interfere','interference','interfering','interfered'], answer:1, explanation:'"Interference" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'investigate', question:'The police launched a thorough _______ into the bank robbery.', options:['investigate','investigation','investigative','investigator'], answer:1, explanation:'"Investigation" is the noun form needed as the object of "launched".' },
+        { type:'fill', baseWord:'qualify', question:'She earned her teaching _______ after four years of study.', options:['qualify','qualification','qualified','qualifying'], answer:1, explanation:'"Qualification" is the noun form needed as the object of "earned".' },
+        { type:'fill', baseWord:'punish', question:'The _______ for breaking the school rules is a week of detention.', options:['punish','punishment','punishable','punishing'], answer:1, explanation:'"Punishment" is the noun form needed as the subject of the sentence.' },
+        { type:'fill', baseWord:'require', question:'The main _______ for the job is five years of experience.', options:['require','requirement','required','requiring'], answer:1, explanation:'"Requirement" is the noun form needed as the subject of the sentence.' }
+      ],
+      identify: [
+        { type:'identify', question:'She spoke <span class="highlight">confidently</span> during the debate.', highlighted:'confidently', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Confidently" is an adverb modifying the verb "spoke".' },
+        { type:'identify', question:'The <span class="highlight">discovery</span> changed the course of history.', highlighted:'discovery', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Discovery" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'He <span class="highlight">carefully</span> opened the ancient book.', highlighted:'carefully', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Carefully" is an adverb modifying the verb "opened".' },
+        { type:'identify', question:'The students <span class="highlight">discussed</span> the topic in class.', highlighted:'discussed', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Discussed" is the past tense verb describing the students\' action.' },
+        { type:'identify', question:'It was an <span class="highlight">incredible</span> performance.', highlighted:'incredible', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Incredible" is an adjective modifying the noun "performance".' },
+        { type:'identify', question:'The <span class="highlight">development</span> of the city took many years.', highlighted:'development', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Development" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'They <span class="highlight">celebrated</span> their victory with a party.', highlighted:'celebrated', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Celebrated" is the past tense verb describing their action.' },
+        { type:'identify', question:'The lake was <span class="highlight">remarkably</span> calm that morning.', highlighted:'remarkably', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Remarkably" is an adverb modifying the adjective "calm".' },
+        { type:'identify', question:'She has a very <span class="highlight">generous</span> personality.', highlighted:'generous', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Generous" is an adjective modifying the noun "personality".' },
+        { type:'identify', question:'His <span class="highlight">kindness</span> made everyone feel welcome.', highlighted:'kindness', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Kindness" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The car moved <span class="highlight">rapidly</span> through the tunnel.', highlighted:'rapidly', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Rapidly" is an adverb modifying the verb "moved".' },
+        { type:'identify', question:'Physical <span class="highlight">strength</span> is important in many sports.', highlighted:'strength', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Strength" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The doctor <span class="highlight">examined</span> the patient thoroughly.', highlighted:'examined', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Examined" is a past tense verb describing the doctor\'s action.' },
+        { type:'identify', question:'She is a <span class="highlight">brilliant</span> scientist.', highlighted:'brilliant', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Brilliant" is an adjective modifying the noun "scientist".' },
+        { type:'identify', question:'The thief crept <span class="highlight">silently</span> through the window.', highlighted:'silently', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Silently" is an adverb modifying the verb "crept".' },
+        { type:'identify', question:'The <span class="highlight">movement</span> of the planets fascinates astronomers.', highlighted:'movement', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Movement" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The workers <span class="highlight">constructed</span> a bridge over the river.', highlighted:'constructed', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Constructed" is a past tense verb describing the workers\' action.' },
+        { type:'identify', question:'An <span class="highlight">enormous</span> whale surfaced near the boat.', highlighted:'enormous', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Enormous" is an adjective modifying the noun "whale".' },
+        { type:'identify', question:'She <span class="highlight">frequently</span> visits her grandparents.', highlighted:'frequently', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Frequently" is an adverb modifying the verb "visits".' },
+        { type:'identify', question:'True <span class="highlight">happiness</span> comes from within.', highlighted:'happiness', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Happiness" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The team <span class="highlight">improved</span> their score in the second half.', highlighted:'improved', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Improved" is a past tense verb describing the team\'s action.' },
+        { type:'identify', question:'They discovered an <span class="highlight">ancient</span> temple in the jungle.', highlighted:'ancient', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Ancient" is an adjective modifying the noun "temple".' },
+        { type:'identify', question:'The temperature <span class="highlight">gradually</span> increased throughout the day.', highlighted:'gradually', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Gradually" is an adverb modifying the verb "increased".' },
+        { type:'identify', question:'<span class="highlight">Freedom</span> is a basic human right.', highlighted:'Freedom', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Freedom" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The postman <span class="highlight">delivered</span> the parcel this morning.', highlighted:'delivered', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Delivered" is a past tense verb describing the postman\'s action.' },
+        { type:'identify', question:'The painting was extremely <span class="highlight">valuable</span>.', highlighted:'valuable', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Valuable" is an adjective following the linking verb "was".' },
+        { type:'identify', question:'He waited <span class="highlight">patiently</span> for his turn.', highlighted:'patiently', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Patiently" is an adverb modifying the verb "waited".' },
+        { type:'identify', question:'Her greatest <span class="highlight">achievement</span> was winning the scholarship.', highlighted:'achievement', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Achievement" is a noun acting as the subject complement.' },
+        { type:'identify', question:'The principal <span class="highlight">announced</span> the winners at the assembly.', highlighted:'announced', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Announced" is a past tense verb describing the principal\'s action.' },
+        { type:'identify', question:'Crossing the road without looking is <span class="highlight">dangerous</span>.', highlighted:'dangerous', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Dangerous" is an adjective following the linking verb "is".' },
+        { type:'identify', question:'The crowd cheered <span class="highlight">enthusiastically</span> for the team.', highlighted:'enthusiastically', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Enthusiastically" is an adverb modifying the verb "cheered".' },
+        { type:'identify', question:'With age comes <span class="highlight">wisdom</span>.', highlighted:'wisdom', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Wisdom" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'She <span class="highlight">organized</span> the charity event last month.', highlighted:'organized', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Organized" is a past tense verb describing her action.' },
+        { type:'identify', question:'Water is <span class="highlight">essential</span> for all living things.', highlighted:'essential', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Essential" is an adjective following the linking verb "is".' },
+        { type:'identify', question:'The archer aimed <span class="highlight">accurately</span> at the target.', highlighted:'accurately', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Accurately" is an adverb modifying the verb "aimed".' },
+        { type:'identify', question:'<span class="highlight">Poverty</span> remains a major issue worldwide.', highlighted:'Poverty', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Poverty" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The librarian <span class="highlight">recommended</span> several good books.', highlighted:'recommended', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Recommended" is a past tense verb describing the librarian\'s action.' },
+        { type:'identify', question:'The view from the mountain top was <span class="highlight">magnificent</span>.', highlighted:'magnificent', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Magnificent" is an adjective following the linking verb "was".' },
+        { type:'identify', question:'She <span class="highlight">thoroughly</span> cleaned the entire house.', highlighted:'thoroughly', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Thoroughly" is an adverb modifying the verb "cleaned".' },
+        { type:'identify', question:'<span class="highlight">Pollution</span> is harming our planet every day.', highlighted:'Pollution', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Pollution" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The magician <span class="highlight">transformed</span> the scarf into a dove.', highlighted:'transformed', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Transformed" is a past tense verb describing the magician\'s action.' },
+        { type:'identify', question:'A <span class="highlight">mysterious</span> letter arrived at the door.', highlighted:'mysterious', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Mysterious" is an adjective modifying the noun "letter".' },
+        { type:'identify', question:'He <span class="highlight">reluctantly</span> agreed to help with the project.', highlighted:'reluctantly', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Reluctantly" is an adverb modifying the verb "agreed".' },
+        { type:'identify', question:'There was an <span class="highlight">abundance</span> of food at the festival.', highlighted:'abundance', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Abundance" is a noun used as the object of the preposition.' },
+        { type:'identify', question:'The soldiers <span class="highlight">surrendered</span> after the long battle.', highlighted:'surrendered', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Surrendered" is a past tense verb describing the soldiers\' action.' },
+        { type:'identify', question:'The athlete made a <span class="highlight">remarkable</span> comeback.', highlighted:'remarkable', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Remarkable" is an adjective modifying the noun "comeback".' },
+        { type:'identify', question:'She <span class="highlight">desperately</span> wanted to win the race.', highlighted:'desperately', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Desperately" is an adverb modifying the verb "wanted".' },
+        { type:'identify', question:'His <span class="highlight">curiosity</span> led him to explore the old building.', highlighted:'curiosity', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Curiosity" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The committee <span class="highlight">approved</span> the new budget plan.', highlighted:'approved', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Approved" is a past tense verb describing the committee\'s action.' },
+        { type:'identify', question:'The students felt <span class="highlight">independent</span> living away from home.', highlighted:'independent', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Independent" is an adjective following the linking verb "felt".' },
+        { type:'identify', question:'The ballerina moved <span class="highlight">gracefully</span> across the stage.', highlighted:'gracefully', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Gracefully" is an adverb modifying the verb "moved".' },
+        { type:'identify', question:'The <span class="highlight">elegance</span> of the design impressed the judges.', highlighted:'elegance', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Elegance" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'He <span class="highlight">whispered</span> the secret to his best friend.', highlighted:'whispered', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Whispered" is a past tense verb describing his action.' },
+        { type:'identify', question:'Be careful with that <span class="highlight">fragile</span> vase on the shelf.', highlighted:'fragile', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Fragile" is an adjective modifying the noun "vase".' },
+        { type:'identify', question:'The fox ran <span class="highlight">swiftly</span> through the dense forest.', highlighted:'swiftly', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Swiftly" is an adverb modifying the verb "ran".' },
+        { type:'identify', question:'Her <span class="highlight">intelligence</span> was recognised by all her teachers.', highlighted:'intelligence', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Intelligence" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The army <span class="highlight">conquered</span> the territory after a long campaign.', highlighted:'conquered', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Conquered" is a past tense verb describing the army\'s action.' },
+        { type:'identify', question:'The fireworks display was truly <span class="highlight">spectacular</span>.', highlighted:'spectacular', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Spectacular" is an adjective following the linking verb "was".' },
+        { type:'identify', question:'She <span class="highlight">deliberately</span> ignored the rude comment.', highlighted:'deliberately', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Deliberately" is an adverb modifying the verb "ignored".' },
+        { type:'identify', question:'Economic <span class="highlight">prosperity</span> depends on many different factors.', highlighted:'prosperity', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Prosperity" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The workers <span class="highlight">demolished</span> the old factory last month.', highlighted:'demolished', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Demolished" is a past tense verb describing the workers\' action.' },
+        { type:'identify', question:'The rescue team showed a <span class="highlight">courageous</span> effort.', highlighted:'courageous', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Courageous" is an adjective modifying the noun "effort".' },
+        { type:'identify', question:'She speaks three languages <span class="highlight">fluently</span>.', highlighted:'fluently', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Fluently" is an adverb modifying the verb "speaks".' },
+        { type:'identify', question:'They expressed deep <span class="highlight">gratitude</span> for the help they received.', highlighted:'gratitude', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Gratitude" is a noun acting as the object of "expressed".' },
+        { type:'identify', question:'Many students <span class="highlight">volunteered</span> to help clean the park.', highlighted:'volunteered', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Volunteered" is a past tense verb describing the students\' action.' },
+        { type:'identify', question:'There was a <span class="highlight">peculiar</span> smell coming from the kitchen.', highlighted:'peculiar', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Peculiar" is an adjective modifying the noun "smell".' },
+        { type:'identify', question:'The baby slept <span class="highlight">peacefully</span> in the cot all night.', highlighted:'peacefully', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Peacefully" is an adverb modifying the verb "slept".' },
+        { type:'identify', question:'His <span class="highlight">persistence</span> was the key to his eventual success.', highlighted:'persistence', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Persistence" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The wind <span class="highlight">scattered</span> the leaves across the garden.', highlighted:'scattered', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Scattered" is a past tense verb describing the wind\'s action.' },
+        { type:'identify', question:'An <span class="highlight">immense</span> crowd gathered outside the palace gates.', highlighted:'immense', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Immense" is an adjective modifying the noun "crowd".' },
+        { type:'identify', question:'The cat <span class="highlight">instinctively</span> chased the mouse across the room.', highlighted:'instinctively', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Instinctively" is an adverb modifying the verb "chased".' },
+        { type:'identify', question:'Her <span class="highlight">enthusiasm</span> for the project was truly inspiring.', highlighted:'enthusiasm', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Enthusiasm" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'She <span class="highlight">inherited</span> a beautiful cottage from her grandmother.', highlighted:'inherited', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Inherited" is a past tense verb describing her action.' },
+        { type:'identify', question:'The two rivals had a <span class="highlight">fierce</span> argument on stage.', highlighted:'fierce', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Fierce" is an adjective modifying the noun "argument".' },
+        { type:'identify', question:'The driver <span class="highlight">cautiously</span> navigated the icy road.', highlighted:'cautiously', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Cautiously" is an adverb modifying the verb "navigated".' },
+        { type:'identify', question:'<span class="highlight">Loyalty</span> is a quality that is highly valued in friendships.', highlighted:'Loyalty', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Loyalty" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The founders <span class="highlight">established</span> the company back in 1985.', highlighted:'established', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Established" is a past tense verb describing the founders\' action.' },
+        { type:'identify', question:'The country enjoyed a <span class="highlight">prosperous</span> decade of growth.', highlighted:'prosperous', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Prosperous" is an adjective modifying the noun "decade".' },
+        { type:'identify', question:'The lights went out <span class="highlight">instantly</span> during the storm.', highlighted:'instantly', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Instantly" is an adverb modifying the verb phrase "went out".' },
+        { type:'identify', question:'Her <span class="highlight">generosity</span> towards the community was well known.', highlighted:'generosity', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Generosity" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The residents <span class="highlight">evacuated</span> the building within minutes.', highlighted:'evacuated', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Evacuated" is a past tense verb describing the residents\' action.' },
+        { type:'identify', question:'The sunset over the lake was absolutely <span class="highlight">stunning</span>.', highlighted:'stunning', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Stunning" is an adjective following the linking verb "was".' },
+        { type:'identify', question:'The captain raised the trophy <span class="highlight">triumphantly</span> above his head.', highlighted:'triumphantly', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Triumphantly" is an adverb modifying the verb "raised".' },
+        { type:'identify', question:'She showed great <span class="highlight">compassion</span> for the injured animal.', highlighted:'compassion', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Compassion" is a noun acting as the object of "showed".' },
+        { type:'identify', question:'The lawyer <span class="highlight">persuaded</span> the jury with strong evidence.', highlighted:'persuaded', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Persuaded" is a past tense verb describing the lawyer\'s action.' },
+        { type:'identify', question:'The new regulations should be completely <span class="highlight">transparent</span>.', highlighted:'transparent', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Transparent" is an adjective following the linking verb "should be".' },
+        { type:'identify', question:'The athlete trained <span class="highlight">vigorously</span> for the upcoming marathon.', highlighted:'vigorously', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Vigorously" is an adverb modifying the verb "trained".' },
+        { type:'identify', question:'<span class="highlight">Integrity</span> is essential in any leadership role.', highlighted:'Integrity', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Integrity" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'The stage lights <span class="highlight">illuminated</span> the entire hall beautifully.', highlighted:'illuminated', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Illuminated" is a past tense verb describing the lights\' action.' },
+        { type:'identify', question:'The ecosystem is extremely <span class="highlight">vulnerable</span> to pollution.', highlighted:'vulnerable', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Vulnerable" is an adjective following the linking verb "is".' },
+        { type:'identify', question:'She <span class="highlight">effortlessly</span> solved the complex puzzle in seconds.', highlighted:'effortlessly', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Effortlessly" is an adverb modifying the verb "solved".' },
+        { type:'identify', question:'His <span class="highlight">ambition</span> drove him to start his own business.', highlighted:'ambition', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Ambition" is a noun acting as the subject of the sentence.' },
+        { type:'identify', question:'Nobody <span class="highlight">anticipated</span> such a dramatic change in the weather.', highlighted:'anticipated', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Anticipated" is a past tense verb describing the action.' },
+        { type:'identify', question:'The idea of wearing a suit to the beach seemed <span class="highlight">absurd</span>.', highlighted:'absurd', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Absurd" is an adjective following the linking verb "seemed".' },
+        { type:'identify', question:'The dog <span class="highlight">obediently</span> followed its owner\'s commands.', highlighted:'obediently', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Obediently" is an adverb modifying the verb "followed".' },
+        { type:'identify', question:'He enjoyed the <span class="highlight">solitude</span> of the quiet mountain cabin.', highlighted:'solitude', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Solitude" is a noun acting as the object of "enjoyed".' },
+        { type:'identify', question:'The diplomats <span class="highlight">negotiated</span> a ceasefire agreement successfully.', highlighted:'negotiated', options:['Noun','Verb','Adjective','Adverb'], answer:1, explanation:'"Negotiated" is a past tense verb describing the diplomats\' action.' },
+        { type:'identify', question:'The scientist played a <span class="highlight">prominent</span> role in the research.', highlighted:'prominent', options:['Noun','Verb','Adjective','Adverb'], answer:2, explanation:'"Prominent" is an adjective modifying the noun "role".' },
+        { type:'identify', question:'The car stopped <span class="highlight">abruptly</span> at the traffic lights.', highlighted:'abruptly', options:['Noun','Verb','Adjective','Adverb'], answer:3, explanation:'"Abruptly" is an adverb modifying the verb "stopped".' },
+        { type:'identify', question:'The country\'s cultural <span class="highlight">heritage</span> attracts millions of visitors.', highlighted:'heritage', options:['Noun','Verb','Adjective','Adverb'], answer:0, explanation:'"Heritage" is a noun acting as the subject of the sentence.' }
+      ],
+      transform: [
+        { type:'transform', targetPOS:'noun', baseWord:'strong', options:['strong','strongly','strength','strengthen'], answer:2, explanation:'"Strength" is the noun form of "strong".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'patience', options:['patience','patient','patiently','impatient'], answer:2, explanation:'"Patiently" is the adverb form of "patience".' },
+        { type:'transform', targetPOS:'verb', baseWord:'breath', options:['breath','breathe','breathless','breathlessly'], answer:1, explanation:'"Breathe" is the verb form of "breath".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'rely', options:['rely','reliable','reliably','reliance'], answer:1, explanation:'"Reliable" is the adjective form of "rely".' },
+        { type:'transform', targetPOS:'noun', baseWord:'generous', options:['generous','generously','generosity','generalize'], answer:2, explanation:'"Generosity" is the noun form of "generous".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'care', options:['care','careful','carefully','careless'], answer:2, explanation:'"Carefully" is the adverb form of "care".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'mystery', options:['mystery','mysterious','mysteriously','mystify'], answer:1, explanation:'"Mysterious" is the adjective form of "mystery".' },
+        { type:'transform', targetPOS:'verb', baseWord:'advice', options:['advice','advise','advisable','advisory'], answer:1, explanation:'"Advise" is the verb form of "advice".' },
+        { type:'transform', targetPOS:'noun', baseWord:'appear', options:['appear','apparent','apparently','appearance'], answer:3, explanation:'"Appearance" is the noun form of "appear".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'fortune', options:['fortune','fortunate','fortunately','misfortune'], answer:2, explanation:'"Fortunately" is the adverb form of "fortune".' },
+        { type:'transform', targetPOS:'noun', baseWord:'brave', options:['brave','bravely','bravery','braver'], answer:2, explanation:'"Bravery" is the noun form of "brave".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'happy', options:['happy','happiness','happily','happier'], answer:2, explanation:'"Happily" is the adverb form of "happy".' },
+        { type:'transform', targetPOS:'verb', baseWord:'pure', options:['pure','purely','purity','purify'], answer:3, explanation:'"Purify" is the verb form of "pure".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'comfort', options:['comfort','comfortable','comfortably','discomfort'], answer:1, explanation:'"Comfortable" is the adjective form of "comfort".' },
+        { type:'transform', targetPOS:'noun', baseWord:'wide', options:['wide','widely','width','widen'], answer:2, explanation:'"Width" is the noun form of "wide".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'honest', options:['honest','honesty','honestly','dishonest'], answer:2, explanation:'"Honestly" is the adverb form of "honest".' },
+        { type:'transform', targetPOS:'verb', baseWord:'simple', options:['simple','simply','simplicity','simplify'], answer:3, explanation:'"Simplify" is the verb form of "simple".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'attract', options:['attract','attractive','attractively','attraction'], answer:1, explanation:'"Attractive" is the adjective form of "attract".' },
+        { type:'transform', targetPOS:'noun', baseWord:'deep', options:['deep','deeply','depth','deepen'], answer:2, explanation:'"Depth" is the noun form of "deep".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'hope', options:['hope','hopeful','hopefully','hopeless'], answer:2, explanation:'"Hopefully" is the adverb form of "hope".' },
+        { type:'transform', targetPOS:'verb', baseWord:'class', options:['class','classic','classification','classify'], answer:3, explanation:'"Classify" is the verb form of "class".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'power', options:['power','powerful','powerfully','powerless'], answer:1, explanation:'"Powerful" is the adjective form of "power".' },
+        { type:'transform', targetPOS:'noun', baseWord:'free', options:['free','freely','freedom','freeing'], answer:2, explanation:'"Freedom" is the noun form of "free".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'quiet', options:['quiet','quietness','quietly','quieten'], answer:2, explanation:'"Quietly" is the adverb form of "quiet".' },
+        { type:'transform', targetPOS:'verb', baseWord:'note', options:['note','notable','notably','notify'], answer:3, explanation:'"Notify" is the verb form of "note".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'response', options:['response','responsive','responsively','respond'], answer:1, explanation:'"Responsive" is the adjective form of "response".' },
+        { type:'transform', targetPOS:'noun', baseWord:'warm', options:['warm','warmly','warmth','warmer'], answer:2, explanation:'"Warmth" is the noun form of "warm".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'final', options:['final','finally','finalize','finalist'], answer:1, explanation:'"Finally" is the adverb form of "final".' },
+        { type:'transform', targetPOS:'verb', baseWord:'apology', options:['apology','apologetic','apologetically','apologize'], answer:3, explanation:'"Apologize" is the verb form of "apology".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'nature', options:['nature','natural','naturally','naturalist'], answer:1, explanation:'"Natural" is the adjective form of "nature".' },
+        { type:'transform', targetPOS:'noun', baseWord:'long', options:['long','lengthen','length','longer'], answer:2, explanation:'"Length" is the noun form of "long".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'extreme', options:['extreme','extremity','extremely','extremist'], answer:2, explanation:'"Extremely" is the adverb form of "extreme".' },
+        { type:'transform', targetPOS:'verb', baseWord:'memory', options:['memory','memorable','memorably','memorize'], answer:3, explanation:'"Memorize" is the verb form of "memory".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'reason', options:['reason','reasonable','reasonably','reasoning'], answer:1, explanation:'"Reasonable" is the adjective form of "reason".' },
+        { type:'transform', targetPOS:'noun', baseWord:'true', options:['true','truly','truth','truthful'], answer:2, explanation:'"Truth" is the noun form of "true".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'safe', options:['safe','safety','safely','safeguard'], answer:2, explanation:'"Safely" is the adverb form of "safe".' },
+        { type:'transform', targetPOS:'verb', baseWord:'glory', options:['glory','glorious','gloriously','glorify'], answer:3, explanation:'"Glorify" is the verb form of "glory".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'origin', options:['origin','original','originally','originate'], answer:1, explanation:'"Original" is the adjective form of "origin".' },
+        { type:'transform', targetPOS:'noun', baseWord:'popular', options:['popular','popularly','popularity','popularize'], answer:2, explanation:'"Popularity" is the noun form of "popular".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'proud', options:['proud','pride','proudly','prideful'], answer:2, explanation:'"Proudly" is the adverb form of "proud".' },
+        { type:'transform', targetPOS:'verb', baseWord:'terror', options:['terror','terrible','terribly','terrify'], answer:3, explanation:'"Terrify" is the verb form of "terror".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'benefit', options:['benefit','beneficial','beneficially','beneficiary'], answer:1, explanation:'"Beneficial" is the adjective form of "benefit".' },
+        { type:'transform', targetPOS:'noun', baseWord:'silent', options:['silent','silently','silence','silencer'], answer:2, explanation:'"Silence" is the noun form of "silent".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'fierce', options:['fierce','fierceness','fiercely','fiercer'], answer:2, explanation:'"Fiercely" is the adverb form of "fierce".' },
+        { type:'transform', targetPOS:'verb', baseWord:'identity', options:['identity','identical','identically','identify'], answer:3, explanation:'"Identify" is the verb form of "identity".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'profit', options:['profit','profitable','profitably','profiteer'], answer:1, explanation:'"Profitable" is the adjective form of "profit".' },
+        { type:'transform', targetPOS:'noun', baseWord:'fail', options:['fail','faithful','failure','failing'], answer:2, explanation:'"Failure" is the noun form of "fail".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'rapid', options:['rapid','rapidity','rapidly','rapids'], answer:2, explanation:'"Rapidly" is the adverb form of "rapid".' },
+        { type:'transform', targetPOS:'verb', baseWord:'strength', options:['strength','strong','strongly','strengthen'], answer:3, explanation:'"Strengthen" is the verb form of "strength".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'anxiety', options:['anxiety','anxious','anxiously','anxieties'], answer:1, explanation:'"Anxious" is the adjective form of "anxiety".' },
+        { type:'transform', targetPOS:'noun', baseWord:'wise', options:['wise','wisely','wisdom','widen'], answer:2, explanation:'"Wisdom" is the noun form of "wise".' },
+        { type:'transform', targetPOS:'verb', baseWord:'real', options:['real','really','reality','realize'], answer:3, explanation:'"Realize" is the verb form of "real".' },
+        { type:'transform', targetPOS:'noun', baseWord:'active', options:['active','actively','activity','activate'], answer:2, explanation:'"Activity" is the noun form of "active".' },
+        { type:'transform', targetPOS:'noun', baseWord:'dark', options:['dark','darkly','darkness','darken'], answer:2, explanation:'"Darkness" is the noun form of "dark".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'joy', options:['joy','joyful','joyfully','joyous'], answer:1, explanation:'"Joyful" is the adjective form of "joy".' },
+        { type:'transform', targetPOS:'noun', baseWord:'able', options:['able','ably','ability','enable'], answer:2, explanation:'"Ability" is the noun form of "able".' },
+        { type:'transform', targetPOS:'verb', baseWord:'legal', options:['legal','legally','legality','legalize'], answer:3, explanation:'"Legalize" is the verb form of "legal".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'clear', options:['clear','clearly','clarity','clearance'], answer:1, explanation:'"Clearly" is the adverb form of "clear".' },
+        { type:'transform', targetPOS:'verb', baseWord:'danger', options:['danger','dangerous','dangerously','endanger'], answer:3, explanation:'"Endanger" is the verb form of "danger".' },
+        { type:'transform', targetPOS:'noun', baseWord:'sweet', options:['sweet','sweetly','sweetness','sweeten'], answer:2, explanation:'"Sweetness" is the noun form of "sweet".' },
+        { type:'transform', targetPOS:'noun', baseWord:'humble', options:['humble','humbly','humility','humbled'], answer:2, explanation:'"Humility" is the noun form of "humble".' },
+        { type:'transform', targetPOS:'noun', baseWord:'stable', options:['stable','stably','stability','stabilize'], answer:2, explanation:'"Stability" is the noun form of "stable".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'critic', options:['critic','critical','critically','criticize'], answer:1, explanation:'"Critical" is the adjective form of "critic".' },
+        { type:'transform', targetPOS:'noun', baseWord:'rich', options:['rich','richly','richness','enrich'], answer:2, explanation:'"Richness" is the noun form of "rich".' },
+        { type:'transform', targetPOS:'verb', baseWord:'modern', options:['modern','modernity','modernly','modernize'], answer:3, explanation:'"Modernize" is the verb form of "modern".' },
+        { type:'transform', targetPOS:'adverb', baseWord:'sharp', options:['sharp','sharply','sharpness','sharpen'], answer:1, explanation:'"Sharply" is the adverb form of "sharp".' },
+        { type:'transform', targetPOS:'noun', baseWord:'just', options:['just','justly','justice','justify'], answer:2, explanation:'"Justice" is the noun form of "just".' },
+        { type:'transform', targetPOS:'noun', baseWord:'equal', options:['equal','equally','equality','equalize'], answer:2, explanation:'"Equality" is the noun form of "equal".' },
+        { type:'transform', targetPOS:'verb', baseWord:'weak', options:['weak','weakly','weakness','weaken'], answer:3, explanation:'"Weaken" is the verb form of "weak".' },
+        { type:'transform', targetPOS:'noun', baseWord:'polite', options:['polite','politely','politeness','impolite'], answer:2, explanation:'"Politeness" is the noun form of "polite".' },
+        { type:'transform', targetPOS:'noun', baseWord:'diverse', options:['diverse','diversely','diversity','diversify'], answer:2, explanation:'"Diversity" is the noun form of "diverse".' },
+        { type:'transform', targetPOS:'noun', baseWord:'private', options:['private','privately','privacy','privatize'], answer:2, explanation:'"Privacy" is the noun form of "private".' },
+        { type:'transform', targetPOS:'noun', baseWord:'loyal', options:['loyal','loyally','loyalty','disloyal'], answer:2, explanation:'"Loyalty" is the noun form of "loyal".' },
+        { type:'transform', targetPOS:'verb', baseWord:'soft', options:['soft','softly','softness','soften'], answer:3, explanation:'"Soften" is the verb form of "soft".' },
+        { type:'transform', targetPOS:'noun', baseWord:'moist', options:['moist','moisten','moisture','moistly'], answer:2, explanation:'"Moisture" is the noun form of "moist".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'symbol', options:['symbol','symbolic','symbolically','symbolize'], answer:1, explanation:'"Symbolic" is the adjective form of "symbol".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'obey', options:['obey','obedient','obediently','obedience'], answer:1, explanation:'"Obedient" is the adjective form of "obey".' },
+        { type:'transform', targetPOS:'noun', baseWord:'mature', options:['mature','maturely','maturity','immature'], answer:2, explanation:'"Maturity" is the noun form of "mature".' },
+        { type:'transform', targetPOS:'noun', baseWord:'bitter', options:['bitter','bitterly','bitterness','embittered'], answer:2, explanation:'"Bitterness" is the noun form of "bitter".' },
+        { type:'transform', targetPOS:'noun', baseWord:'visible', options:['visible','visibly','visibility','invisible'], answer:2, explanation:'"Visibility" is the noun form of "visible".' },
+        { type:'transform', targetPOS:'noun', baseWord:'fertile', options:['fertile','fertilize','fertility','fertilizer'], answer:2, explanation:'"Fertility" is the noun form of "fertile".' },
+        { type:'transform', targetPOS:'verb', baseWord:'special', options:['special','specially','specialty','specialize'], answer:3, explanation:'"Specialize" is the verb form of "special".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'fool', options:['fool','foolish','foolishly','foolishness'], answer:1, explanation:'"Foolish" is the adjective form of "fool".' },
+        { type:'transform', targetPOS:'noun', baseWord:'certain', options:['certain','certainly','certainty','uncertain'], answer:2, explanation:'"Certainty" is the noun form of "certain".' },
+        { type:'transform', targetPOS:'verb', baseWord:'broad', options:['broad','broadly','breadth','broaden'], answer:3, explanation:'"Broaden" is the verb form of "broad".' },
+        { type:'transform', targetPOS:'noun', baseWord:'vacant', options:['vacant','vacantly','vacancy','vacate'], answer:2, explanation:'"Vacancy" is the noun form of "vacant".' },
+        { type:'transform', targetPOS:'noun', baseWord:'creative', options:['creative','creatively','creativity','create'], answer:2, explanation:'"Creativity" is the noun form of "creative".' },
+        { type:'transform', targetPOS:'noun', baseWord:'moral', options:['moral','morally','morality','moralize'], answer:2, explanation:'"Morality" is the noun form of "moral".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'child', options:['child','childish','childishly','childhood'], answer:1, explanation:'"Childish" is the adjective form of "child".' },
+        { type:'transform', targetPOS:'noun', baseWord:'brutal', options:['brutal','brutally','brutality','brutalize'], answer:2, explanation:'"Brutality" is the noun form of "brutal".' },
+        { type:'transform', targetPOS:'noun', baseWord:'lonely', options:['lonely','lonelier','loneliness','loner'], answer:2, explanation:'"Loneliness" is the noun form of "lonely".' },
+        { type:'transform', targetPOS:'noun', baseWord:'complex', options:['complex','complexly','complexity','complicate'], answer:2, explanation:'"Complexity" is the noun form of "complex".' },
+        { type:'transform', targetPOS:'verb', baseWord:'bright', options:['bright','brightly','brightness','brighten'], answer:3, explanation:'"Brighten" is the verb form of "bright".' },
+        { type:'transform', targetPOS:'noun', baseWord:'scarce', options:['scarce','scarcely','scarcity','scarcer'], answer:2, explanation:'"Scarcity" is the noun form of "scarce".' },
+        { type:'transform', targetPOS:'adjective', baseWord:'hero', options:['hero','heroic','heroically','heroism'], answer:1, explanation:'"Heroic" is the adjective form of "hero".' },
+        { type:'transform', targetPOS:'verb', baseWord:'civil', options:['civil','civilly','civilization','civilize'], answer:3, explanation:'"Civilize" is the verb form of "civil".' },
+        { type:'transform', targetPOS:'noun', baseWord:'thick', options:['thick','thickly','thickness','thicken'], answer:2, explanation:'"Thickness" is the noun form of "thick".' },
+        { type:'transform', targetPOS:'noun', baseWord:'curious', options:['curious','curiously','curiosity','curiousness'], answer:2, explanation:'"Curiosity" is the noun form of "curious".' },
+        { type:'transform', targetPOS:'noun', baseWord:'flexible', options:['flexible','flexibly','flexibility','inflexible'], answer:2, explanation:'"Flexibility" is the noun form of "flexible".' },
+        { type:'transform', targetPOS:'noun', baseWord:'deaf', options:['deaf','deafen','deafness','deafening'], answer:2, explanation:'"Deafness" is the noun form of "deaf".' }
+      ],
+      correct: [
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The beautiful of the sunset amazed us.','The beauty of the sunset amazed us.','The beautify of the sunset amazed us.','The beautifully of the sunset amazed us.'], answer:1, explanation:'"Beauty" is the correct noun form needed after "The" and before "of".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She sang the song very beauty.','She sang the song very beautiful.','She sang the song very beautifully.','She sang the song very beautify.'], answer:2, explanation:'"Beautifully" is the correct adverb form modifying the verb "sang".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The govern announced new policies.','The government announced new policies.','The governmental announced new policies.','The governmentally announced new policies.'], answer:1, explanation:'"Government" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['He acted very courage during the crisis.','He acted very courageous during the crisis.','He acted very courageously during the crisis.','He acted very encourage during the crisis.'], answer:2, explanation:'"Courageously" is the correct adverb form modifying the verb "acted".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The teacher gave us a very help explanation.','The teacher gave us a very helpfully explanation.','The teacher gave us a very helpful explanation.','The teacher gave us a very helpfulness explanation.'], answer:2, explanation:'"Helpful" is the correct adjective form modifying the noun "explanation".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The compete was held at the stadium.','The competitive was held at the stadium.','The competitively was held at the stadium.','The competition was held at the stadium.'], answer:3, explanation:'"Competition" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['We need to wide the road for more traffic.','We need to width the road for more traffic.','We need to widen the road for more traffic.','We need to widely the road for more traffic.'], answer:2, explanation:'"Widen" is the correct verb form needed after "to".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Their friend was very strong.','Their friendly was very strong.','Their friendness was very strong.','Their friendship was very strong.'], answer:3, explanation:'"Friendship" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She left the room very quiet.','She left the room very quietly.','She left the room very quietness.','She left the room very quieten.'], answer:1, explanation:'"Quietly" is the correct adverb form modifying the verb "left".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The scenery looked very nature.','The scenery looked very naturally.','The scenery looked very natural.','The scenery looked very naturalize.'], answer:2, explanation:'"Natural" is the correct adjective form after the linking verb "looked".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['He has a wonderful imagine.','He has a wonderful imaginary.','He has a wonderful imagination.','He has a wonderful imaginative.'], answer:2, explanation:'"Imagination" is the correct noun form needed as the object of "has".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She complete the project success.','She completed the project successful.','She completed the project successfully.','She completed the project succeed.'], answer:2, explanation:'"Successfully" is the correct adverb form modifying the verb "completed".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['He has a large collect of stamps.','He has a large collecting of stamps.','He has a large collector of stamps.','He has a large collection of stamps.'], answer:3, explanation:'"Collection" is the correct noun form needed as the object of "has".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The village was very peace.','The village was very peaceful.','The village was very peacefully.','The village was very peacefulness.'], answer:1, explanation:'"Peaceful" is the correct adjective form after the linking verb "was".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Air pollute is a global problem.','Air polluted is a global problem.','Air pollution is a global problem.','Air polluting is a global problem.'], answer:2, explanation:'"Pollution" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The bus arrives regular every morning.','The bus arrives regularly every morning.','The bus arrives regularize every morning.','The bus arrives regularity every morning.'], answer:1, explanation:'"Regularly" is the correct adverb form modifying the verb "arrives".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['His invent changed the world.','His inventive changed the world.','His invention changed the world.','His inventively changed the world.'], answer:2, explanation:'"Invention" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Exercise can strong your muscles.','Exercise can strength your muscles.','Exercise can strongly your muscles.','Exercise can strengthen your muscles.'], answer:3, explanation:'"Strengthen" is the correct verb form needed after "can".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The electric in this building is old.','The electrical in this building is old.','The electricity in this building is old.','The electrically in this building is old.'], answer:2, explanation:'"Electricity" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['This material is very depend.','This material is very dependable.','This material is very dependably.','This material is very dependence.'], answer:1, explanation:'"Dependable" is the correct adjective form after "very" and the linking verb "is".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['You need permit to park here.','You need permissive to park here.','You need permission to park here.','You need permissible to park here.'], answer:2, explanation:'"Permission" is the correct noun form needed as the object of "need".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The view was incredible beautiful.','The view was incredible beautifully.','The view was incredibly beautiful.','The view was incredibly beauty.'], answer:2, explanation:'"Incredibly" is the correct adverb form modifying the adjective "beautiful".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The entertain at the party was great.','The entertainer at the party was great.','The entertaining at the party was great.','The entertainment at the party was great.'], answer:3, explanation:'"Entertainment" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['We need to simple the instructions.','We need to simplicity the instructions.','We need to simplify the instructions.','We need to simply the instructions.'], answer:2, explanation:'"Simplify" is the correct verb form needed after "to".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The bed is very comfort.','The bed is very comfortably.','The bed is very comfortable.','The bed is very comforting.'], answer:2, explanation:'"Comfortable" is the correct adjective form after "very" and the linking verb "is".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She spoke confidence in the interview.','She spoke confidently in the interview.','She spoke confident in the interview.','She spoke confide in the interview.'], answer:1, explanation:'"Confidently" is the correct adverb form modifying the verb "spoke".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['His know of history is impressive.','His knowledgeable of history is impressive.','His knowledge of history is impressive.','His knowingly of history is impressive.'], answer:2, explanation:'"Knowledge" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Scientists class animals into groups.','Scientists classification animals into groups.','Scientists classical animals into groups.','Scientists classify animals into groups.'], answer:3, explanation:'"Classify" is the correct verb form needed as the main verb.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['We enjoyed the tradition music at the festival.','We enjoyed the traditional music at the festival.','We enjoyed the traditionally music at the festival.','We enjoyed the tradition music at the festival.'], answer:1, explanation:'"Traditional" is the correct adjective form modifying the noun "music".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Taking responsible is important.','Taking responsibly is important.','Taking responsibility is important.','Taking responsive is important.'], answer:2, explanation:'"Responsibility" is the correct noun form needed as the object of "taking".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['He drove danger fast on the highway.','He drove dangerously fast on the highway.','He drove dangerous fast on the highway.','He drove danger fast on the highway.'], answer:1, explanation:'"Dangerously" is the correct adverb form modifying the adjective "fast".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The explain was clear and simple.','The explained was clear and simple.','The explanatory was clear and simple.','The explanation was clear and simple.'], answer:3, explanation:'"Explanation" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She tried to memory the poem.','She tried to memorable the poem.','She tried to memorize the poem.','She tried to memorably the poem.'], answer:2, explanation:'"Memorize" is the correct verb form needed after "to".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The design was very origin.','The design was very original.','The design was very originally.','The design was very originate.'], answer:1, explanation:'"Original" is the correct adjective form after "very" and the linking verb "was".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Survive in the desert is difficult.','Survived in the desert is difficult.','Survival in the desert is difficult.','Surviving in the desert is difficult.'], answer:2, explanation:'"Survival" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The data was analysed science.','The data was analysed scientific.','The data was analysed scientifically.','The data was analysed scientist.'], answer:2, explanation:'"Scientifically" is the correct adverb form modifying the verb "analysed".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The celebrate lasted all weekend.','The celebrated lasted all weekend.','The celebratory lasted all weekend.','The celebration lasted all weekend.'], answer:3, explanation:'"Celebration" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The loud noise terror the children.','The loud noise terrible the children.','The loud noise terrified the children.','The loud noise terribly the children.'], answer:2, explanation:'"Terrified" is the correct past tense verb form.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The fog made the forest look mystery.','The fog made the forest look mysterious.','The fog made the forest look mysteriously.','The fog made the forest look mystify.'], answer:1, explanation:'"Mysterious" is the correct adjective form after the linking verb "look".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The children showed great excite.','The children showed great excited.','The children showed great excitement.','The children showed great excitedly.'], answer:2, explanation:'"Excitement" is the correct noun form needed as the object of "showed".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Fortune, nobody was injured in the accident.','Fortunate, nobody was injured in the accident.','Fortunately, nobody was injured in the accident.','Fortuning, nobody was injured in the accident.'], answer:2, explanation:'"Fortunately" is the correct adverb form modifying the entire sentence.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The price seemed very reason.','The price seemed very reasonable.','The price seemed very reasonably.','The price seemed very reasoning.'], answer:1, explanation:'"Reasonable" is the correct adjective form after "very" and the linking verb "seemed".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Her generous impressed everyone.','Her generously impressed everyone.','Her generosity impressed everyone.','Her generalize impressed everyone.'], answer:2, explanation:'"Generosity" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Police could not identity the suspect.','Police could not identical the suspect.','Police could not identification the suspect.','Police could not identify the suspect.'], answer:3, explanation:'"Identify" is the correct verb form needed after "could not".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The writer has a very create mind.','The writer has a very creation mind.','The writer has a very creative mind.','The writer has a very creatively mind.'], answer:2, explanation:'"Creative" is the correct adjective form modifying the noun "mind".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She handled the matter very profession.','She handled the matter very professional.','She handled the matter very professionally.','She handled the matter very professionalism.'], answer:2, explanation:'"Professionally" is the correct adverb form modifying the verb "handled".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Your attend at the ceremony is required.','Your attendant at the ceremony is required.','Your attendance at the ceremony is required.','Your attentive at the ceremony is required.'], answer:2, explanation:'"Attendance" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['We need to pure the water before drinking.','We need to purely the water before drinking.','We need to purity the water before drinking.','We need to purify the water before drinking.'], answer:3, explanation:'"Purify" is the correct verb form needed after "to".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The information was very value.','The information was very valuable.','The information was very valuably.','The information was very valuation.'], answer:1, explanation:'"Valuable" is the correct adjective form after "very" and the linking verb "was".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['After much hesitate, he made his choice.','After much hesitant, he made his choice.','After much hesitation, he made his choice.','After much hesitantly, he made his choice.'], answer:2, explanation:'"Hesitation" is the correct noun form needed as the object of "after".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The arrive of the train was delayed by heavy snow.','The arrival of the train was delayed by heavy snow.','The arrived of the train was delayed by heavy snow.','The arriving of the train was delayed by heavy snow.'], answer:1, explanation:'"Arrival" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She spoke very eloquent at the graduation ceremony.','She spoke very eloquence at the graduation ceremony.','She spoke very eloquently at the graduation ceremony.','She spoke very eloquencies at the graduation ceremony.'], answer:2, explanation:'"Eloquently" is the correct adverb form modifying the verb "spoke".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The improve in his health was truly remarkable.','The improved in his health was truly remarkable.','The improving in his health was truly remarkable.','The improvement in his health was truly remarkable.'], answer:3, explanation:'"Improvement" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Fresh air is benefit for your overall health.','Fresh air is beneficial for your overall health.','Fresh air is beneficially for your overall health.','Fresh air is beneficiary for your overall health.'], answer:1, explanation:'"Beneficial" is the correct adjective form after the linking verb "is".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['He complete forgot about the important appointment.','He completing forgot about the important appointment.','He completely forgot about the important appointment.','He completion forgot about the important appointment.'], answer:2, explanation:'"Completely" is the correct adverb form modifying the verb "forgot".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The maintain of old buildings is very expensive.','The maintainable of old buildings is very expensive.','The maintained of old buildings is very expensive.','The maintenance of old buildings is very expensive.'], answer:3, explanation:'"Maintenance" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The children played very noisy in the playground.','The children played very noisily in the playground.','The children played very noise in the playground.','The children played very noisiness in the playground.'], answer:1, explanation:'"Noisily" is the correct adverb form modifying the verb "played".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She showed great determine during the marathon.','She showed great determinedly during the marathon.','She showed great determined during the marathon.','She showed great determination during the marathon.'], answer:3, explanation:'"Determination" is the correct noun form needed as the object of "showed".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The museum has an impress collection of modern art.','The museum has an impressive collection of modern art.','The museum has an impressively collection of modern art.','The museum has an impression collection of modern art.'], answer:1, explanation:'"Impressive" is the correct adjective form modifying the noun "collection".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['We need to broad our understanding of the topic.','We need to broadly our understanding of the topic.','We need to breadth our understanding of the topic.','We need to broaden our understanding of the topic.'], answer:3, explanation:'"Broaden" is the correct verb form needed after "to".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The negotiate between the two sides ultimately failed.','The negotiable between the two sides ultimately failed.','The negotiator between the two sides ultimately failed.','The negotiation between the two sides ultimately failed.'], answer:3, explanation:'"Negotiation" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['He ran incredible fast in the final race.','He ran incredibly fast in the final race.','He ran incredulous fast in the final race.','He ran incredulity fast in the final race.'], answer:1, explanation:'"Incredibly" is the correct adverb form modifying the adjective "fast".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The investigate lasted for several long weeks.','The investigative lasted for several long weeks.','The investigator lasted for several long weeks.','The investigation lasted for several long weeks.'], answer:3, explanation:'"Investigation" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The new bridge is very stability.','The new bridge is very stabilize.','The new bridge is very stable.','The new bridge is very stably.'], answer:2, explanation:'"Stable" is the correct adjective form after "very" and the linking verb "is".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She mature handled the difficult situation at work.','She maturely handled the difficult situation at work.','She maturity handled the difficult situation at work.','She maturation handled the difficult situation at work.'], answer:1, explanation:'"Maturely" is the correct adverb form modifying the verb "handled".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['His ambitious was to become a famous doctor.','His ambitiously was to become a famous doctor.','His ambition was to become a famous doctor.','His ambitiousness was to become a famous doctor.'], answer:2, explanation:'"Ambition" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The food at the restaurant was exception good.','The food at the restaurant was exceptional good.','The food at the restaurant was exceptionally good.','The food at the restaurant was excepted good.'], answer:2, explanation:'"Exceptionally" is the correct adverb form modifying the adjective "good".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['This fabric is very flexibility.','This fabric is very flexible.','This fabric is very flexibly.','This fabric is very flex.'], answer:1, explanation:'"Flexible" is the correct adjective form after "very" and the linking verb "is".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Please clean the wound to prevent infect.','Please clean the wound to prevent infectious.','Please clean the wound to prevent infection.','Please clean the wound to prevent infectiously.'], answer:2, explanation:'"Infection" is the correct noun form needed as the object of "prevent".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The judge acted very fair during the entire trial.','The judge acted very fairness during the entire trial.','The judge acted very fairly during the entire trial.','The judge acted very fairest during the entire trial.'], answer:2, explanation:'"Fairly" is the correct adverb form modifying the verb "acted".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['His absent from school was noticed by the teacher.','His absently from school was noticed by the teacher.','His absence from school was noticed by the teacher.','His absentee from school was noticed by the teacher.'], answer:2, explanation:'"Absence" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The surgeon performed the operation skill.','The surgeon performed the operation skilful.','The surgeon performed the operation skilfully.','The surgeon performed the operation skills.'], answer:2, explanation:'"Skilfully" is the correct adverb form modifying the verb "performed".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Early detect of the disease can save many lives.','Early detectable of the disease can save many lives.','Early detected of the disease can save many lives.','Early detection of the disease can save many lives.'], answer:3, explanation:'"Detection" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The new employee was very enthusiasm about the role.','The new employee was very enthusiastic about the role.','The new employee was very enthusiastically about the role.','The new employee was very enthusiast about the role.'], answer:1, explanation:'"Enthusiastic" is the correct adjective form after "very" and the linking verb "was".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She managed to soft the blow with gentle words.','She managed to softness the blow with gentle words.','She managed to softly the blow with gentle words.','She managed to soften the blow with gentle words.'], answer:3, explanation:'"Soften" is the correct verb form needed after "to".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['His response was absolute unexpected by everyone.','His response was absolutely unexpected by everyone.','His response was absolution unexpected by everyone.','His response was absoluteness unexpected by everyone.'], answer:1, explanation:'"Absolutely" is the correct adverb form modifying the adjective "unexpected".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The propose was accepted by the entire board.','The proposed was accepted by the entire board.','The proposal was accepted by the entire board.','The proposing was accepted by the entire board.'], answer:2, explanation:'"Proposal" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['You should apology for your rude behaviour.','You should apologetic for your rude behaviour.','You should apologize for your rude behaviour.','You should apologetically for your rude behaviour.'], answer:2, explanation:'"Apologize" is the correct verb form needed after "should".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The child was extreme tired after playing all afternoon.','The child was extremely tired after playing all afternoon.','The child was extremity tired after playing all afternoon.','The child was extremism tired after playing all afternoon.'], answer:1, explanation:'"Extremely" is the correct adverb form modifying the adjective "tired".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Good communicate is key in any strong relationship.','Good communicative is key in any strong relationship.','Good communication is key in any strong relationship.','Good communicatively is key in any strong relationship.'], answer:2, explanation:'"Communication" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The injure player was rushed to the nearest hospital.','The injurious player was rushed to the nearest hospital.','The injured player was rushed to the nearest hospital.','The injuring player was rushed to the nearest hospital.'], answer:2, explanation:'"Injured" is the correct adjective form modifying the noun "player".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Her loyal to her friends is truly admirable.','Her loyally to her friends is truly admirable.','Her loyalty to her friends is truly admirable.','Her loyalness to her friends is truly admirable.'], answer:2, explanation:'"Loyalty" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The students completed the assignment efficient.','The students completed the assignment efficiency.','The students completed the assignment efficiencies.','The students completed the assignment efficiently.'], answer:3, explanation:'"Efficiently" is the correct adverb form modifying the verb "completed".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['Harsh sunlight can weak the fabric over time.','Harsh sunlight can weakness the fabric over time.','Harsh sunlight can weakly the fabric over time.','Harsh sunlight can weaken the fabric over time.'], answer:3, explanation:'"Weaken" is the correct verb form needed after "can".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The dark of the cave frightened the young children.','The darkly of the cave frightened the young children.','The darken of the cave frightened the young children.','The darkness of the cave frightened the young children.'], answer:3, explanation:'"Darkness" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The instructions were remark clear and very helpful.','The instructions were remarkable clear and very helpful.','The instructions were remarkably clear and very helpful.','The instructions were remarkableness clear and very helpful.'], answer:2, explanation:'"Remarkably" is the correct adverb form modifying the adjective "clear".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['We received a generous donate from an anonymous person.','We received a generous donated from an anonymous person.','We received a generous donation from an anonymous person.','We received a generous donating from an anonymous person.'], answer:2, explanation:'"Donation" is the correct noun form needed as the object of "received".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['His honest throughout the entire trial was commendable.','His honestly throughout the entire trial was commendable.','His honesty throughout the entire trial was commendable.','His honestness throughout the entire trial was commendable.'], answer:2, explanation:'"Honesty" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The child has a very act imagination for storytelling.','The child has a very active imagination for storytelling.','The child has a very actively imagination for storytelling.','The child has a very activity imagination for storytelling.'], answer:1, explanation:'"Active" is the correct adjective form modifying the noun "imagination".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The warm of the fire made everyone feel cosy.','The warmly of the fire made everyone feel cosy.','The warming of the fire made everyone feel cosy.','The warmth of the fire made everyone feel cosy.'], answer:3, explanation:'"Warmth" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['We need to modern our computer systems urgently.','We need to modernity our computer systems urgently.','We need to modernly our computer systems urgently.','We need to modernize our computer systems urgently.'], answer:3, explanation:'"Modernize" is the correct verb form needed after "to".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The river flowed gentle through the green valley.','The river flowed gently through the green valley.','The river flowed gentleness through the green valley.','The river flowed gentility through the green valley.'], answer:1, explanation:'"Gently" is the correct adverb form modifying the verb "flowed".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['His kind towards strangers surprised everyone greatly.','His kindly towards strangers surprised everyone greatly.','His kindness towards strangers surprised everyone greatly.','His kinder towards strangers surprised everyone greatly.'], answer:2, explanation:'"Kindness" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['She answered all the questions very accuracy.','She answered all the questions very accurate.','She answered all the questions very accurately.','She answered all the questions very accurateness.'], answer:2, explanation:'"Accurately" is the correct adverb form modifying the verb "answered".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The similar between the two paintings is striking.','The similarly between the two paintings is striking.','The similarity between the two paintings is striking.','The similarize between the two paintings is striking.'], answer:2, explanation:'"Similarity" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['You must response to the email by Friday morning.','You must responsive to the email by Friday morning.','You must respond to the email by Friday morning.','You must responsibly to the email by Friday morning.'], answer:2, explanation:'"Respond" is the correct verb form needed after "must".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The bright of the sun hurt my eyes terribly.','The brightly of the sun hurt my eyes terribly.','The brighten of the sun hurt my eyes terribly.','The brightness of the sun hurt my eyes terribly.'], answer:3, explanation:'"Brightness" is the correct noun form needed as the subject.' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The building was visible damaged after the earthquake.','The building was visibly damaged after the earthquake.','The building was visibility damaged after the earthquake.','The building was vision damaged after the earthquake.'], answer:1, explanation:'"Visibly" is the correct adverb form modifying the adjective "damaged".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['They treated the guests very hospitable at the event.','They treated the guests very hospitality at the event.','They treated the guests very hospitably at the event.','They treated the guests very hospitalize at the event.'], answer:2, explanation:'"Hospitably" is the correct adverb form modifying the verb "treated".' },
+        { type:'correct', question:'Which sentence uses the correct word form?', options:['The protect of wildlife is a global priority.','The protective of wildlife is a global priority.','The protectively of wildlife is a global priority.','The protection of wildlife is a global priority.'], answer:3, explanation:'"Protection" is the correct noun form needed as the subject.' }
+      ]
+    };
+
+    /* ===== STATE ===== */
+    var state = {
+      user: { cls: '', number: '', name: '' },
+      isGuest: false,
+      questions: [],
+      currentQ: 0,
+      score: 0,
+      answers: [],
+      answered: false,
+      finishTime: null
+    };
+
+    /* ===== HELPERS ===== */
+    function shuffleArray(arr) {
+      var a = arr.slice();
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+      }
+      return a;
+    }
+
+    function shuffleOptions(q) {
+      var n = q.options.length;
+      var indices = [];
+      for (var i = 0; i < n; i++) indices.push(i);
+      for (var k = n - 1; k > 0; k--) {
+        var j = Math.floor(Math.random() * (k + 1));
+        var tmp = indices[k]; indices[k] = indices[j]; indices[j] = tmp;
+      }
+      var newOpts = indices.map(function(idx) { return q.options[idx]; });
+      var newAnswer = indices.indexOf(q.answer);
+      return Object.assign({}, q, { options: newOpts, answer: newAnswer });
+    }
+
+    function selectQuestions() {
+      var fillPool = shuffleArray(QUESTIONS.fill).slice(0, 3);
+      var idPool = shuffleArray(QUESTIONS.identify).slice(0, 3);
+      var trPool = shuffleArray(QUESTIONS.transform).slice(0, 2);
+      var coPool = shuffleArray(QUESTIONS.correct).slice(0, 2);
+      var all = fillPool.concat(idPool).concat(trPool).concat(coPool);
+      return shuffleArray(all).map(shuffleOptions);
+    }
+
+    var LETTERS = ['A','B','C','D'];
+    var TYPE_LABELS = { fill:'Fill in the Blank', identify:'Identify Part of Speech', transform:'Word Transformation', correct:'Correct Usage' };
+
+    /* ===== SCREEN MANAGEMENT ===== */
+    function showScreen(id) {
+      var screens = document.querySelectorAll('.screen');
+      for (var i = 0; i < screens.length; i++) {
+        screens[i].classList.remove('active');
+      }
+      document.getElementById(id).classList.add('active');
+      document.getElementById('app').scrollTop = 0;
+    }
+
+    /* ===== QUIZ LOGIC ===== */
+    function startQuiz(asGuest) {
+      if (asGuest) {
+        state.isGuest = true;
+        state.user = { cls: '', number: '', name: '' };
+      } else {
+        state.isGuest = false;
+        state.user.cls = document.getElementById('input-class').value.trim();
+        state.user.number = document.getElementById('input-number').value.trim();
+        state.user.name = document.getElementById('input-name').value.trim();
+      }
+      state.questions = selectQuestions();
+      state.currentQ = 0;
+      state.score = 0;
+      state.answers = [];
+      state.answered = false;
+      state.finishTime = null;
+      renderQuestion();
+      showScreen('quiz-screen');
+    }
+
+    function renderQuestion() {
+      var q = state.questions[state.currentQ];
+      state.answered = false;
+
+      document.getElementById('q-current').textContent = state.currentQ + 1;
+      document.getElementById('live-score').textContent = 'Score: ' + state.score;
+      document.getElementById('progress-fill').style.width = ((state.currentQ) / 10 * 100) + '%';
+      document.getElementById('q-type-badge').textContent = TYPE_LABELS[q.type] || q.type;
+
+      /* Build question text */
+      var qTextEl = document.getElementById('q-text');
+      var baseEl = document.getElementById('q-base-word');
+      baseEl.innerHTML = '';
+
+      if (q.type === 'fill') {
+        qTextEl.innerHTML = q.question.replace('_______', '<span class="highlight">_______</span>');
+        baseEl.innerHTML = 'Base word: <strong>' + q.baseWord + '</strong>';
+      } else if (q.type === 'identify') {
+        qTextEl.innerHTML = q.question;
+      } else if (q.type === 'transform') {
+        qTextEl.innerHTML = 'Choose the <strong>' + q.targetPOS.toUpperCase() + '</strong> form of the word:';
+        baseEl.innerHTML = 'Word: <strong>' + q.baseWord + '</strong>';
+      } else if (q.type === 'correct') {
+        qTextEl.innerHTML = q.question;
+      }
+
+      /* Build options */
+      var optsEl = document.getElementById('options-list');
+      optsEl.innerHTML = '';
+      q.options.forEach(function(opt, idx) {
+        var btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerHTML = '<span class="option-letter">' + LETTERS[idx] + '</span><span>' + opt + '</span>';
+        btn.addEventListener('click', function() { handleAnswer(idx); });
+        optsEl.appendChild(btn);
+      });
+
+      /* Hide feedback & next */
+      var fbBox = document.getElementById('feedback-box');
+      fbBox.classList.remove('show', 'correct-fb', 'wrong-fb');
+      document.getElementById('next-btn-wrap').classList.remove('show');
+    }
+
+    function handleAnswer(idx) {
+      if (state.answered) return;
+      state.answered = true;
+
+      var q = state.questions[state.currentQ];
+      var isCorrect = idx === q.answer;
+
+      if (isCorrect) state.score++;
+      state.answers.push({ questionIndex: state.currentQ, selected: idx, correct: q.answer, isCorrect: isCorrect });
+
+      document.getElementById('live-score').textContent = 'Score: ' + state.score;
+
+      /* Style options */
+      var btns = document.querySelectorAll('#options-list .option-btn');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.add('disabled');
+        if (i === q.answer) btns[i].classList.add('correct');
+        if (i === idx && !isCorrect) btns[i].classList.add('wrong');
+      }
+
+      /* Show feedback */
+      var fbBox = document.getElementById('feedback-box');
+      fbBox.classList.add('show');
+      if (isCorrect) {
+        fbBox.classList.add('correct-fb');
+        document.getElementById('fb-title').textContent = '✓ Correct!';
+      } else {
+        fbBox.classList.add('wrong-fb');
+        document.getElementById('fb-title').textContent = '✗ Incorrect — the answer is ' + LETTERS[q.answer];
+      }
+      document.getElementById('fb-explain').textContent = q.explanation;
+
+      /* Show next button */
+      document.getElementById('next-btn-wrap').classList.add('show');
+      var nextBtn = document.getElementById('btn-next');
+      nextBtn.textContent = state.currentQ < 9 ? 'Next Question ➜' : 'See Results ➜';
+    }
+
+    function nextQuestion() {
+      if (state.currentQ < 9) {
+        state.currentQ++;
+        renderQuestion();
+        document.getElementById('app').scrollTop = 0;
+      } else {
+        showResults();
+      }
+    }
+
+    var SCORE_MAX = 10;
+    var SCORE_CIRCUMFERENCE = 2 * Math.PI * 62;
+
+    function getScoreVisual(score) {
+      var pct = score / SCORE_MAX;
+      var color = pct >= 0.8 ? 'var(--success)' : pct >= 0.5 ? 'var(--accent)' : 'var(--error)';
+      var msg = '';
+      var msgBg = '';
+
+      if (score === SCORE_MAX) {
+        msg = 'Perfect Score!';
+        msgBg = 'var(--success-bg)';
+      } else if (score >= 8) {
+        msg = 'Excellent Work!';
+        msgBg = 'var(--success-bg)';
+      } else if (score >= 6) {
+        msg = 'Good Job!';
+        msgBg = 'var(--primary-pale)';
+      } else if (score >= 4) {
+        msg = 'Keep Practising!';
+        msgBg = 'var(--accent-glow)';
+      } else {
+        msg = 'Don\'t Give Up!';
+        msgBg = 'var(--error-bg)';
+      }
+
+      return {
+        pct: pct,
+        color: color,
+        message: msg,
+        messageBg: msgBg,
+        dashOffset: SCORE_CIRCUMFERENCE * (1 - pct)
+      };
+    }
+
+    function parseAndClampScore(raw) {
+      var num = parseInt(String(raw).replace(/[^0-9-]/g, ''), 10);
+      if (isNaN(num)) num = 0;
+      if (num < 0) num = 0;
+      if (num > SCORE_MAX) num = SCORE_MAX;
+      return num;
+    }
+
+    function applyScoreVisual(score) {
+      var visual = getScoreVisual(score);
+      var arc = document.getElementById('score-arc');
+      var scoreEl = document.getElementById('score-display');
+      var msgEl = document.getElementById('score-message');
+      var detailScoreEl = document.getElementById('detail-score');
+
+      if (arc) {
+        arc.style.stroke = visual.color;
+        arc.style.strokeDasharray = SCORE_CIRCUMFERENCE.toFixed(2);
+        arc.style.strokeDashoffset = visual.dashOffset;
+      }
+
+      if (scoreEl) {
+        scoreEl.textContent = String(score);
+        scoreEl.style.color = visual.color;
+      }
+
+      if (msgEl) {
+        msgEl.textContent = visual.message;
+        msgEl.style.background = visual.messageBg;
+        msgEl.style.color = 'var(--text)';
+      }
+
+      if (detailScoreEl) {
+        detailScoreEl.textContent = score + ' / ' + SCORE_MAX;
+      }
+    }
+
+    function showResults() {
+      state.finishTime = new Date();
+      document.getElementById('progress-fill').style.width = '100%';
+      showScreen('results-screen');
+
+      applyScoreVisual(state.score);
+
+      var nameEl = document.getElementById('detail-name');
+      var classEl = document.getElementById('detail-class');
+      var numberEl = document.getElementById('detail-number');
+      var dateEl = document.getElementById('detail-date');
+      var timeEl = document.getElementById('detail-time');
+
+      if (nameEl) nameEl.textContent = (!state.isGuest && state.user.name) ? state.user.name : 'GUEST';
+      if (classEl) classEl.textContent = (!state.isGuest && state.user.cls) ? state.user.cls : '4D';
+      if (numberEl) numberEl.textContent = (!state.isGuest && state.user.number) ? state.user.number : '8';
+      if (dateEl) dateEl.textContent = formatDate(state.finishTime);
+      if (timeEl) timeEl.textContent = formatTime(state.finishTime);
+
+      /* Confetti for high scores */
+      if (state.score >= 8) spawnConfetti();
+    }
+
+    function detailRow(label, value) {
+      return '<div class="result-detail-row"><span class="detail-label">' + label + '</span><span class="detail-value">' + value + '</span></div>';
+    }
+
+    function formatDate(d) {
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    function formatTime(d) {
+      var h = d.getHours();
+      var m = d.getMinutes();
+      var ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return h + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+    }
+
+    function spawnConfetti() {
+      var container = document.createElement('div');
+      container.className = 'confetti-container';
+      document.body.appendChild(container);
+      var colors = ['#E8853A','#3DA35D','#2B4570','#D64045','#FFAB6B','#6B9FDB'];
+      for (var i = 0; i < 50; i++) {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.width = (Math.random() * 8 + 5) + 'px';
+        piece.style.height = (Math.random() * 8 + 5) + 'px';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        piece.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+        piece.style.animationDelay = (Math.random() * 1.5) + 's';
+        container.appendChild(piece);
+      }
+      setTimeout(function() { container.remove(); }, 5000);
+    }
+
+    /* ===== REVIEW ===== */
+    function showReview() {
+      showScreen('review-screen');
+      var listEl = document.getElementById('review-list');
+      listEl.innerHTML = '';
+
+      state.answers.forEach(function(ans, i) {
+        var q = state.questions[ans.questionIndex];
+        var card = document.createElement('div');
+        card.className = 'question-card';
+        card.style.borderLeft = '4px solid ' + (ans.isCorrect ? 'var(--success)' : 'var(--error)');
+
+        var badge = ans.isCorrect ? '<span style="color:var(--success);font-weight:700;">✓</span>' : '<span style="color:var(--error);font-weight:700;">✗</span>';
+        var qLabel = '<span class="question-type-badge" style="margin-bottom:8px;">' + TYPE_LABELS[q.type] + '</span>';
+
+        var questionHtml = '';
+        if (q.type === 'fill') {
+          questionHtml = q.question.replace('_______', '<strong style="color:var(--success)">' + q.options[q.answer] + '</strong>');
+        } else if (q.type === 'identify') {
+          questionHtml = q.question;
+        } else if (q.type === 'transform') {
+          questionHtml = 'The <strong>' + q.targetPOS.toUpperCase() + '</strong> form of "<strong>' + q.baseWord + '</strong>"';
+        } else {
+          questionHtml = q.question;
+        }
+
+        var yourAnswer = q.options[ans.selected];
+        var correctAnswer = q.options[q.answer];
+
+        var answerHtml;
+        if (ans.isCorrect) {
+          answerHtml = '<div style="font-size:14px;margin-top:8px;color:var(--success);font-weight:600;">Your answer: ' + yourAnswer + '</div>';
+        } else {
+          answerHtml = '<div style="font-size:14px;margin-top:8px;"><span style="color:var(--error);font-weight:600;text-decoration:line-through;">Your answer: ' + yourAnswer + '</span><br><span style="color:var(--success);font-weight:600;">Correct: ' + correctAnswer + '</span></div>';
+        }
+
+        card.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">' + badge + ' <span style="font-size:13px;color:var(--text-muted);font-weight:600;">Q' + (i + 1) + '</span> ' + qLabel + '</div>' +
+          '<div class="question-text" style="font-size:17px;margin-bottom:4px;">' + questionHtml + '</div>' +
+          answerHtml +
+          '<div style="font-size:13px;color:var(--text-secondary);margin-top:6px;font-style:italic;">' + q.explanation + '</div>';
+
+        listEl.appendChild(card);
+      });
+    }
+
+    function restartQuiz() {
+      /* Reset score circle */
+      document.getElementById('score-arc').style.strokeDashoffset = '389.56';
+      showScreen('welcome-screen');
+    }
+
+    function initResultOnlyEditablePage() {
+      var now = new Date();
+      state.score = 2;
+      state.isGuest = true;
+      state.user = { cls: '4D', number: '8', name: 'GUEST' };
+      state.finishTime = now;
+
+      var classEl = document.getElementById('detail-class');
+      var numberEl = document.getElementById('detail-number');
+      var nameEl = document.getElementById('detail-name');
+      var dateEl = document.getElementById('detail-date');
+      var timeEl = document.getElementById('detail-time');
+
+      if (classEl) classEl.textContent = state.user.cls;
+      if (numberEl) numberEl.textContent = state.user.number;
+      if (nameEl) nameEl.textContent = state.user.name;
+      if (dateEl) dateEl.textContent = formatDate(now);
+      if (timeEl) timeEl.textContent = formatTime(now);
+
+      applyScoreVisual(state.score);
+      showScreen('results-screen');
+    }
+
+    function syncScoreFromDisplay() {
+      var scoreEl = document.getElementById('score-display');
+      if (!scoreEl) return;
+      state.score = parseAndClampScore(scoreEl.textContent);
+      applyScoreVisual(state.score);
+    }
+
+    function syncScoreFromDetail() {
+      var detailScoreEl = document.getElementById('detail-score');
+      if (!detailScoreEl) return;
+      state.score = parseAndClampScore(detailScoreEl.textContent);
+      applyScoreVisual(state.score);
+    }
+
+    /* ===== EVENT LISTENERS ===== */
+    var btnStart = document.getElementById('btn-start');
+    var btnGuest = document.getElementById('btn-guest');
+    var btnNext = document.getElementById('btn-next');
+    var btnRetry = document.getElementById('btn-retry');
+    var btnReview = document.getElementById('btn-review');
+    var btnBackResults = document.getElementById('btn-back-results');
+
+    if (btnStart) btnStart.addEventListener('click', function() { startQuiz(false); });
+    if (btnGuest) btnGuest.addEventListener('click', function() { startQuiz(true); });
+    if (btnNext) btnNext.addEventListener('click', nextQuestion);
+    if (btnRetry) btnRetry.addEventListener('click', restartQuiz);
+    if (btnReview) btnReview.addEventListener('click', showReview);
+    if (btnBackResults) btnBackResults.addEventListener('click', function() { showScreen('results-screen'); });
+
+    /* ===== STUDY NOTES ===== */
+    document.getElementById('btn-open-notes').addEventListener('click', function() { showScreen('notes-screen'); });
+    document.getElementById('btn-back-welcome').addEventListener('click', function() { showScreen('welcome-screen'); });
+
+    var scoreDisplayEl = document.getElementById('score-display');
+    var detailScoreEditableEl = document.getElementById('detail-score');
+    if (scoreDisplayEl) {
+      scoreDisplayEl.addEventListener('input', syncScoreFromDisplay);
+      scoreDisplayEl.addEventListener('blur', syncScoreFromDisplay);
+      scoreDisplayEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          scoreDisplayEl.blur();
+        }
+      });
+    }
+
+    if (detailScoreEditableEl) {
+      detailScoreEditableEl.addEventListener('input', syncScoreFromDetail);
+      detailScoreEditableEl.addEventListener('blur', syncScoreFromDetail);
+      detailScoreEditableEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          detailScoreEditableEl.blur();
+        }
+      });
+    }
+
+    /* Tab navigation */
+    document.getElementById('notes-nav').addEventListener('click', function(e) {
+      var tab = e.target.closest('.notes-tab');
+      if (!tab) return;
+      var tabName = tab.getAttribute('data-tab');
+
+      /* Update active tab button */
+      var allTabs = document.querySelectorAll('.notes-tab');
+      for (var i = 0; i < allTabs.length; i++) {
+        allTabs[i].classList.remove('active');
+      }
+      tab.classList.add('active');
+
+      /* Show corresponding section */
+      var allSections = document.querySelectorAll('.notes-section');
+      for (var j = 0; j < allSections.length; j++) {
+        allSections[j].classList.remove('active');
+      }
+      var targetSection = document.getElementById('tab-' + tabName);
+      if (targetSection) {
+        targetSection.classList.add('active');
+      }
+
+      /* Scroll to top */
+      document.getElementById('app').scrollTop = 0;
+    });
+
+    initResultOnlyEditablePage();
+  </script>
+</body>
+</html>
